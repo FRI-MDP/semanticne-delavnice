@@ -1,0 +1,1 @@
+# Delavnice semantičnega opisovanja podatkov

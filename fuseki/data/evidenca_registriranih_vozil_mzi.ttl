@@ -1,0 +1,897 @@
+# XML Schema
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+# XML Schema Definition (XSD)
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+# Resource Description Framework (RDF)
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+# RDF Schema (RDFS)
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+# Web Ontology Language (OWL)
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+# Data Catalog Vocabulary (DCAT) Version 2
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+# Dublin Core Metadata Terms
+@prefix dct: <http://purl.org/dc/terms/> .
+# vCard Ontology for describing people and organizations
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#> .
+# The PROV-O ontology for provenance information
+@prefix prov: <http://www.w3.org/ns/prov#> .
+# CSVW ontology for Metadata description for tabular data
+@prefix csvw: <http://www.w3.org/ns/csvw#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+
+<http://publications.europa.eu/resource/authority/language/SLV>
+  skos:prefLabel "slovenščina"@sl, "Slovenian"@en .
+
+
+<http://onto.mju.gov.si/pz/dataset/evidenca-registriranih-vozil>
+  
+  # Version indicator for the resource.
+  owl:versionInfo "0.1.0" ;
+
+  # A collection of data, published or curated by a single source, and 
+  # available for access or download in one or more formats. One or more 
+  # representations might be available, with differing schematic layouts and 
+  # formats or serializations.
+  a dcat:Dataset ;
+  
+  # An unambiguous reference to the resource within a given context.
+  dct:identifier "evidenca-registriranih-vozil" ;
+  
+  # A name given to the resource.
+  dct:title "Evidenca registriranih vozil - presek stanja, po letih"@sl ;
+  
+  # Description may include but is not limited to: an abstract, a table of 
+  # contents, a graphical representation, or a free-text account of the 
+  # resource.
+  dct:description "Posnetek stanja Evidence registriranih vozil. Vključuje vse tehnične podatke, brez osebnih podatkov lastnikov in uporabnikov."@sl ;
+  
+  # Date of formal issuance of the resource.
+  dct:issued "2016-11-26"^^xsd:date ;
+
+  # A language of the resource.
+  dct:language <http://publications.europa.eu/resource/authority/language/SLV> ;
+  
+  # Relevant contact information for the catalogued resource. 
+  # Use of vCard is recommended.
+  dcat:contactPoint [
+    a vcard:Kind ;
+    vcard:fn "Ministrstvo za infrastrukturo"@sl ;
+    vcard:hasEmail <mailto:gp.mzi@gov.si>
+  ] ;
+
+  dct:publisher <http://onto.mju.gov.si/pz/org/MZI> ;
+
+  dct:creator <http://onto.mju.gov.si/pz/org/MZI> ;
+
+  # An available distribution of the dataset.
+  # TODO: there can be more distributions like these ...
+  # In this case, they are actually available by month
+  # 
+  dcat:distribution <http://onto.mju.gov.si/pz/distribution/evidenca-registriranih-vozil-2022-06-30.zip> ;
+  dcat:distribution <http://onto.mju.gov.si/pz/distribution/evidenca-registriranih-vozil-2021-12-31.zip> ;
+  dcat:distribution <http://onto.mju.gov.si/pz/distribution/evidenca-registriranih-vozil-2021-06-30.zip> ;
+  dcat:distribution <http://onto.mju.gov.si/pz/distribution/evidenca-registriranih-vozil-2020-12-31.zip> ;
+  dcat:distribution <http://onto.mju.gov.si/pz/distribution/evidenca-registriranih-vozil-2020-06-30.zip> ;
+  # TODO: and so on ...
+
+  # A Web page that can be navigated to in a Web browser to gain access to the 
+  # catalog, a dataset, its distributions and/or additional information.
+  dcat:landingPage <https://podatki.gov.si/dataset/evidenca-registriranih-vozil-presek-stanja> ;
+
+  # A main category of the resource. A resource can have multiple themes.
+  # <https://publications.europa.eu/resource/authority/data-theme/AGRI> Kmetijstvo, ribištvo, gozdarstvo in prehrana
+  # <https://publications.europa.eu/resource/authority/data-theme/ECON> Gospodarstvo in finance
+  # <https://publications.europa.eu/resource/authority/data-theme/EDUC> Izobraževanje, kultura in šport
+  # <https://publications.europa.eu/resource/authority/data-theme/ENER> Energetika
+  # <https://publications.europa.eu/resource/authority/data-theme/ENVI> Okolje
+  # <https://publications.europa.eu/resource/authority/data-theme/GOVE> Vlada in javni sektor
+  # <https://publications.europa.eu/resource/authority/data-theme/HEAL> Zdravje
+  # <https://publications.europa.eu/resource/authority/data-theme/INTR> Mednarodna vprašanja
+  # <https://publications.europa.eu/resource/authority/data-theme/JUST> Pravosodje, pravni sistem in javna varnost
+  # <https://publications.europa.eu/resource/authority/data-theme/OP_DATPRO> Začasni podatki
+  # <https://publications.europa.eu/resource/authority/data-theme/REGI> Regije in mesta
+  # <https://publications.europa.eu/resource/authority/data-theme/SOCI> Prebivalstvo in družba
+  # <https://publications.europa.eu/resource/authority/data-theme/TECH> Znanost in tehnologija
+  # <https://publications.europa.eu/resource/authority/data-theme/TRAN> Transport
+  dcat:theme <https://publications.europa.eu/resource/authority/data-theme/TRAN> .
+
+<http://onto.mju.gov.si/pz/org/KPK>
+  a foaf:Organization, prov:Agent ;
+  foaf:name "Ministrstvo za infrastrukturo"@sl .
+
+
+<http://onto.mju.gov.si/pz/distribution/evidenca-registriranih-vozil-2022-06-30.zip>
+  
+  # A specific representation of a dataset. A dataset might be available in 
+  # multiple serializations that may differ in various ways, including natural 
+  # language, media-type or format, schematic organization, temporal and spatial 
+  # resolution, level of detail or profiles (which might specify any or all of 
+  # the above).
+  a dcat:Distribution ;
+
+  # A name given to the resource.
+  dct:title "Evidenca registriranih vozil v letu 2022, do 30. junija 2022"@sl ;
+
+  # An unambiguous reference to the resource within a given context.
+  dct:identifier "evidenca-registriranih-vozil-2022-06-30-zip" ;
+
+  # A language of the resource.
+  dct:language <http://publications.europa.eu/resource/authority/language/SLV> ;
+
+  # A legal document giving official permission to do something with 
+  # the resource.
+  dct:license <https://creativecommons.org/licenses/by-sa/4.0/> ;
+
+  # Used for the address at which this distribution is available directly, 
+  dcat:downloadURL <https://podatki.gov.si/dataset/75b38301-c0bc-4371-a225-8ba026a66142/resource/53aa0333-96ac-4b13-a9b6-6905dba8a6c8/download/vozilaopsi30.6.2022.zip> ;
+
+  # The compression format of the distribution in which the data is contained 
+  # in a compressed form, e.g. to reduce the size of the downloadable file.
+  dcat:compressFormat <https://publications.europa.eu/resource/authority/file-type/ZIP> ;
+
+  # The media type of the distribution as defined by IANA.
+  dcat:mediaType <https://publications.europa.eu/resource/authority/file-type/CSV> ;
+
+  a csvw:Table ;
+  csvw:tableSchema [
+    a csvw:Schema ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "B-Datum prve registracije vozila" ;
+      csvw:title "B-Datum prve registracije vozila"@sl ;
+      skos:example "24.02.2004" ;
+      csvw:datatype xsd:string ;
+      #csvw:datatype [
+      #  csvw:base: "date" ;
+      #  csvw:format: "dd.MM.yyyy"
+      #] ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "2A-Datum prve registracije vozila v SLO" ;
+      csvw:title "2A-Datum prve registracije vozila v SLO"@sl ;
+      skos:example "07.08.2009" ;
+      csvw:datatype xsd:string ;
+      #csvw:datatype [
+      #  csvw:base: "date" ;
+      #  csvw:format: "dd.MM.yyyy"
+      #] ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "1K-Oznaka potrdila o skladnosti" ;
+      csvw:title "1K-Oznaka potrdila o skladnosti"@sl ;
+      skos:example "SB" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "Datum statusa vozila" ;
+      csvw:title "Datum statusa vozila"@sl ;
+      skos:example "10.03.2022" ;
+      csvw:datatype xsd:string ;
+      #csvw:datatype [
+      #  csvw:base: "date" ;
+      #  csvw:format: "dd.MM.yyyy"
+      #] ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "Status vozila (id)" ;
+      csvw:title "Status vozila (id)"@sl ;
+      skos:example "1" ;
+      csvw:datatype xsd:integer ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "Status vozila (opis)" ;
+      csvw:title "Status vozila (opis)"@sl ;
+      skos:example "registrirano" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "Izvajalna enota prve registracije" ;
+      csvw:title "Izvajalna enota prve registracije"@sl ;
+      skos:example "DOMINKO D.O.O." ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "4A-Registrsko obmocje tablice prve registracije" ;
+      csvw:title "4A-Registrsko obmocje tablice prve registracije"@sl ;
+      skos:example "MARIBOR" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "4A-Podvrsta tablice prve registracije" ;
+      csvw:title "4A-Podvrsta tablice prve registracije"@sl ;
+      skos:example "NT" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "C-Starost uporabnika vozila" ;
+      csvw:title "C-Starost uporabnika vozila"@sl ;
+      skos:example "29" ;
+      csvw:datatype xsd:integer ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "C-Ali je uporabnik pravna ali fizicna oseba" ;
+      csvw:title "C-Ali je uporabnik pravna ali fizicna oseba"@sl ;
+      skos:example "F" ;
+      csvw:datatype xsd:boolean ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "C-Spol uporabnika (ce gre za fizicno osebo)" ;
+      csvw:title "C-Spol uporabnika (ce gre za fizicno osebo)"@sl ;
+      skos:example "M" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "C-Ali je uporabnik tudi lastnik vozila" ;
+      csvw:title "C-Ali je uporabnik tudi lastnik vozila"@sl ;
+      skos:example "DA" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "C13-Upravna enota uporabnika vozila (oznaka)" ;
+      csvw:title "C13-Upravna enota uporabnika vozila (oznaka)"@sl ;
+      skos:example "042" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "C13-Upravna enota uporabnika vozila (opis)" ;
+      csvw:title "C13-Upravna enota uporabnika vozila (opis)"@sl ;
+      skos:example "PTUJ" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "C13-Obcina uporabnika vozila (oznaka)" ;
+      csvw:title "C13-Obcina uporabnika vozila (oznaka)"@sl ;
+      skos:example "096" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "C13-Obcina uporabnika vozila (opis)" ;
+      csvw:title "C13-Obcina uporabnika vozila (opis)"@sl ;
+      skos:example "Ptuj" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "C2-Starost lastnika vozila" ;
+      csvw:title "C2-Starost lastnika vozila"@sl ;
+      skos:example "29" ;
+      csvw:datatype xsd:integer ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "C2-Ali je lastnik pravna ali fizicna oseba" ;
+      csvw:title "C2-Ali je lastnik pravna ali fizicna oseba"@sl ;
+      skos:example "F" ;
+      csvw:datatype xsd:boolean ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "C2-Spol lastnika (ce gre za fizicno osebo)" ;
+      csvw:title "C2-Spol lastnika (ce gre za fizicno osebo)"@sl ;
+      skos:example "M" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "D1-Znamka" ;
+      csvw:title "D1-Znamka"@sl ;
+      skos:example "OPEL" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "D2-Tovar oznaka" ;
+      csvw:title "D2-Tovar oznaka"@sl ;
+      skos:example "VETRA-SW" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "D3-Komerc oznaka" ;
+      csvw:title "D3-Komerc oznaka"@sl ;
+      skos:example "VECTRA / 2.0 / DTI" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "D42-Drzava (opis)" ;
+      csvw:title "D42-Drzava (opis)"@sl ;
+      skos:example "Nemcija" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "D42-Drzava (koda)" ;
+      csvw:title "D42-Drzava (koda)"@sl ;
+      skos:example "DEU" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "D5-Datum izdaje COC dokumenta oz prve registracije" ;
+      csvw:title "D5-Datum izdaje COC dokumenta oz prve registracije"@sl ;
+      skos:example "24.02.2004" ;
+      csvw:datatype xsd:string ;
+      #csvw:datatype [
+      #  csvw:base: "date" ;
+      #  csvw:format: "dd.MM.yyyy"
+      #] ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "E-VIN" ;
+      csvw:title "E-VIN"@sl ;
+      skos:example "W0L0ZCF3541060759" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "E1-Identifikacijska koda" ;
+      csvw:title "E1-Identifikacijska koda"@sl ;
+      csvw:datatype xsd:string 
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "F1-Najvecja tehnicno dovoljena masa vozila" ;
+      csvw:title "F1-Najvecja tehnicno dovoljena masa vozila"@sl ;
+      skos:example "2135" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "F2-Najvecja dovoljena masa vozila pri registraciji" ;
+      csvw:title "F2-Najvecja dovoljena masa vozila pri registraciji"@sl ;
+      csvw:datatype xsd:string 
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "F3-Najvecja dovoljena masa skupine vozil pri registraciji" ;
+      csvw:title "F3-Najvecja dovoljena masa skupine vozil pri registraciji"@sl ;
+      csvw:datatype xsd:string 
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "G-Masa vozila" ;
+      csvw:title "G-Masa vozila"@sl ;
+      skos:example "1580" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "J-Kategorija in vrsta vozila (oznaka)" ;
+      csvw:title "J-Kategorija in vrsta vozila (oznaka)"@sl ;
+      skos:example "M1" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "J-Kategorija in vrsta vozila (opis)" ;
+      csvw:title "J-Kategorija in vrsta vozila (opis)"@sl ;
+      skos:example "osebni avtomobil" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "K-Homologacijska oznaka vozila" ;
+      csvw:title "K-Homologacijska oznaka vozila"@sl ;
+      skos:example "E1*2001/116*0238*01" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "L-Stevilo osi" ;
+      csvw:title "L-Stevilo osi"@sl ;
+      skos:example "2" ;
+      csvw:datatype xsd:integer ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "M-Medosje" ;
+      csvw:title "M-Medosje"@sl ;
+      skos:example "2830" ;
+      csvw:datatype xsd:integer ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "M1-Zadnji previs" ;
+      csvw:title "M1-Zadnji previs"@sl ;
+      csvw:datatype xsd:string 
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "N-Razporeditev najv tehnicno dovoljene mase na osi" ;
+      csvw:title "N-Razporeditev najv tehnicno dovoljene mase na osi"@sl ;
+      csvw:datatype xsd:string 
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "N1-Dovoljene osne obremenitve" ;
+      csvw:title "N1-Dovoljene osne obremenitve"@sl ;
+      skos:example "1075/1100" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "O11-Priklopnik" ;
+      csvw:title "O11-Priklopnik"@sl ;
+      csvw:datatype xsd:string 
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "O12-Polpriklopnik" ;
+      csvw:title "O12-Polpriklopnik"@sl ;
+      csvw:datatype xsd:string 
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "O13-Priklopnik s centralno osjo" ;
+      csvw:title "O13-Priklopnik s centralno osjo"@sl ;
+      skos:example "1400.0" ;
+      csvw:datatype xsd:float ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "O2-Nezavirano priklopno vozilo" ;
+      csvw:title "O2-Nezavirano priklopno vozilo"@sl ;
+      skos:example "750" ;
+      csvw:datatype xsd:float ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "O3-Navpicna obremenitev vlecne naprave / sedla" ;
+      csvw:title "O3-Navpicna obremenitev vlecne naprave / sedla"@sl ;
+      csvw:datatype xsd:string 
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "O4-Tlak v napajalnem vodu zavornega sistema" ;
+      csvw:title "O4-Tlak v napajalnem vodu zavornega sistema"@sl ;
+      csvw:datatype xsd:string 
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "P11-Delovna prostornina" ;
+      csvw:title "P11-Delovna prostornina"@sl ;
+      skos:example "1995" ;
+      csvw:datatype xsd:float ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "P12-Nazivna moc" ;
+      csvw:title "P12-Nazivna moc"@sl ;
+      skos:example "74" ;
+      csvw:datatype xsd:integer ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "P13-Vrsta goriva (opis)" ;
+      csvw:title "P13-Vrsta goriva (opis)"@sl ;
+      skos:example "Dizel" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "P13-Vrsta goriva (oznaka)" ;
+      csvw:title "P13-Vrsta goriva (oznaka)"@sl ;
+      skos:example "D" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "P14-Nazivna vrtilna frekvenca" ;
+      csvw:title "P14-Nazivna vrtilna frekvenca"@sl ;
+      skos:example "3120" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "P15-Oznaka motorja" ;
+      csvw:title "P15-Oznaka motorja"@sl ;
+      skos:example "Y20DTH" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "P21-Tip" ;
+      csvw:title "P21-Tip"@sl ;
+      csvw:datatype xsd:string 
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "P22-Nazivna trajna moc" ;
+      csvw:title "P22-Nazivna trajna moc"@sl ;
+      csvw:datatype xsd:string 
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "P23-Delovna napetost" ;
+      csvw:title "P23-Delovna napetost"@sl ;
+      csvw:datatype xsd:string 
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "P24-Pogonske baterije" ;
+      csvw:title "P24-Pogonske baterije"@sl ;
+      csvw:datatype xsd:string 
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "P25-Oznaka motorja" ;
+      csvw:title "P25-Oznaka motorja"@sl ;
+      csvw:datatype xsd:string 
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "Q-Razmerje moc/masa (samo za motorna kolesa)" ;
+      csvw:title "Q-Razmerje moc/masa (samo za motorna kolesa)"@sl ;
+      csvw:datatype xsd:string 
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "R-Barva vozila (oznaka)" ;
+      csvw:title "R-Barva vozila (oznaka)"@sl ;
+      skos:example "S5D" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "R-Barva vozila (opis)" ;
+      csvw:title "R-Barva vozila (opis)"@sl ;
+      skos:example "navaden - MODRA - TEMNA" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "S1-Stevilo sedezev (vkljucno z vozniskim)" ;
+      csvw:title "S1-Stevilo sedezev (vkljucno z vozniskim)"@sl ;
+      skos:example "5" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "S2-Stevilo stojisc" ;
+      csvw:title "S2-Stevilo stojisc"@sl ;
+      csvw:datatype xsd:string 
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "T-Najvisja hitrost" ;
+      csvw:title "T-Najvisja hitrost"@sl ;
+      skos:example "186" ;
+      csvw:datatype xsd:integer ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "U1-V mirovanju" ;
+      csvw:title "U1-V mirovanju"@sl ;
+      skos:example "71" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "U2-Pri vrtilni frekvenci motorja" ;
+      csvw:title "U2-Pri vrtilni frekvenci motorja"@sl ;
+      csvw:datatype xsd:string 
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "U3-V voznji" ;
+      csvw:title "U3-V voznji"@sl ;
+      skos:example "71" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "V1-CO" ;
+      csvw:title "V1-CO"@sl ;
+      csvw:datatype xsd:string 
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "V10-Vrtilna frekvenca prostega teka, nizka" ;
+      csvw:title "V10-Vrtilna frekvenca prostega teka, nizka"@sl ;
+      csvw:datatype xsd:string 
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "V101-Vsebina CO" ;
+      csvw:title "V101-Vsebina CO"@sl ;
+      csvw:datatype xsd:string 
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "V102-Temperatura olja" ;
+      csvw:title "V102-Temperatura olja"@sl ;
+      csvw:datatype xsd:string 
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "V11-Vrtilna frekvenca prostega teka, visoka" ;
+      csvw:title "V11-Vrtilna frekvenca prostega teka, visoka"@sl ;
+      csvw:datatype xsd:string 
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "V111-Vsebina CO" ;
+      csvw:title "V111-Vsebina CO"@sl ;
+      csvw:datatype xsd:string 
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "V112-Vrednost Lambda" ;
+      csvw:title "V112-Vrednost Lambda"@sl ;
+      csvw:datatype xsd:string 
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "V113-Temperatura olja" ;
+      csvw:title "V113-Temperatura olja"@sl ;
+      csvw:datatype xsd:string 
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "V2-HC" ;
+      csvw:title "V2-HC"@sl ;
+      csvw:datatype xsd:string 
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "V3-Nox" ;
+      csvw:title "V3-Nox"@sl ;
+      csvw:datatype xsd:string 
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "V4-HC + Nox" ;
+      csvw:title "V4-HC + Nox"@sl ;
+      csvw:datatype xsd:string 
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "V5-Delci pri dizel motorjih" ;
+      csvw:title "V5-Delci pri dizel motorjih"@sl ;
+      csvw:datatype xsd:string 
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "V6-Korigiran absorpcijski koeficient pri dizel motorjih" ;
+      csvw:title "V6-Korigiran absorpcijski koeficient pri dizel motorjih"@sl ;
+      csvw:datatype xsd:string 
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "V61-Vrtilna frekvenca prostega teka" ;
+      csvw:title "V61-Vrtilna frekvenca prostega teka"@sl ;
+      csvw:datatype xsd:string 
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "V62-Najvisja vrtilna frekvenca motorja" ;
+      csvw:title "V62-Najvisja vrtilna frekvenca motorja"@sl ;
+      csvw:datatype xsd:string 
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "V63-Temperatura olja" ;
+      csvw:title "V63-Temperatura olja"@sl ;
+      csvw:datatype xsd:string 
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "V7-CO2" ;
+      csvw:title "V7-CO2"@sl ;
+      csvw:datatype xsd:string 
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "CO2_WLTP" ;
+      csvw:title "CO2_WLTP"@sl ;
+      csvw:datatype xsd:string 
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "V8-Kombinirana poraba goriva" ;
+      csvw:title "V8-Kombinirana poraba goriva"@sl ;
+      skos:example "6" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "V9-Podatek o okoljevarstveni kategoriji vozila" ;
+      csvw:title "V9-Podatek o okoljevarstveni kategoriji vozila"@sl ;
+      skos:example "2001/100A" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "X-Oblika nadgradnje (oznaka)" ;
+      csvw:title "X-Oblika nadgradnje (oznaka)"@sl ;
+      skos:example "AC" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "X-Oblika nadgradnje (opis)" ;
+      csvw:title "X-Oblika nadgradnje (opis)"@sl ;
+      skos:example "karavan" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "X1-Dodatni opis nadgradnje" ;
+      csvw:title "X1-Dodatni opis nadgradnje"@sl ;
+      skos:example "-" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "X2-Homologacijska oznaka zascitne konstrukcije" ;
+      csvw:title "X2-Homologacijska oznaka zascitne konstrukcije"@sl ;
+      csvw:datatype xsd:string 
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "Y1-Dolzina" ;
+      csvw:title "Y1-Dolzina"@sl ;
+      skos:example "4822" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "Y2-Sirina" ;
+      csvw:title "Y2-Sirina"@sl ;
+      skos:example "1798" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "Y3-Visina" ;
+      csvw:title "Y3-Visina"@sl ;
+      skos:example "1500" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "Z1-Dovoljene pnevmatike in platisca" ;
+      csvw:title "Z1-Dovoljene pnevmatike in platisca"@sl ;
+      skos:example "195/65 R 15 91H 6 1/2 J X 15 ET 35215/55 R 16 93H 6 1/2 J X 16 ET 41205/55 R 16 91H 6 1/2 J X 16 ET 41215/50 R 17 91W 7 J X 17 ET 41225/45 R 17 91W 7 J X 17 ET 41" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "Z2-Homologacijska oznaka vlecne naprave" ;
+      csvw:title "Z2-Homologacijska oznaka vlecne naprave"@sl ;
+      csvw:datatype xsd:string 
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "Z21-D � vrednost" ;
+      csvw:title "Z21-D � vrednost"@sl ;
+      csvw:datatype xsd:string 
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "Datum izdaje potrdila o skladnosti" ;
+      csvw:title "Datum izdaje potrdila o skladnosti"@sl ;
+      skos:example "20.04.2006" ;
+      csvw:datatype xsd:string ;
+      #csvw:datatype [
+      #  csvw:base: "date" ;
+      #  csvw:format: "dd.MM.yyyy"
+      #] ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "Okoljevarstvena oznaka" ;
+      csvw:title "Okoljevarstvena oznaka"@sl ;
+      skos:example "EURO 3" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "Pogonska os z zracnim vzmetenjem ali priznanim ekvivalentom" ;
+      csvw:title "Pogonska os z zracnim vzmetenjem ali priznanim ekvivalentom"@sl ;
+      csvw:datatype xsd:string 
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "8B-Namen vozila" ;
+      csvw:title "8B-Namen vozila"@sl ;
+      csvw:datatype xsd:string 
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "Komerc oznaka  do prvega /" ;
+      csvw:title "Komerc oznaka  do prvega /"@sl ;
+      skos:example "VECTRA" ;
+      csvw:datatype xsd:string ;
+      csvw:required true
+    ] ;
+    csvw:column [
+      a csvw:Column ;
+      csvw:name "Prevozeni kilometri milje" ;
+      csvw:title "Prevozeni kilometri milje"@sl ;
+      skos:example "283832" ;
+      csvw:datatype xsd:integer ;
+      csvw:required true
+    ] ;	
+  ] .

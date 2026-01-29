@@ -1,0 +1,60 @@
+@prefix fuseki:  <http://jena.apache.org/fuseki#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ja:      <http://jena.hpl.hp.com/2005/11/Assembler#> .
+@prefix :        <#> .
+
+<#pz-service> rdf:type fuseki:Service ;
+  fuseki:name      "/pz" ;
+  fuseki:endpoint  [ fuseki:operation fuseki:query ; fuseki:name "sparql" ];
+  fuseki:endpoint  [ fuseki:operation fuseki:query ; fuseki:name "query" ];
+  fuseki:endpoint  [ fuseki:operation fuseki:gsp_rw ; fuseki:name "data" ];
+  fuseki:dataset   <#pz-dataset> ;
+  .
+
+<#pz-dataset> rdf:type ja:RDFDataset ;
+  ja:defaultGraph <#pz-schema-graph> ;
+  ja:namedGraph [
+    ja:graphName  <http://onto.mju.gov.si/pz/dataset/mnzpprometne-nesrece-mesecno-od-leta-2019-dalje> ;
+    ja:graph      <#pz-prometne-nesrece-graph>
+  ] ;
+  ja:namedGraph [
+    ja:graphName  <http://onto.mju.gov.si/pz/dataset/vladna-gradiva-2> ;
+    ja:graph      <#pz-vladna-gradiva-graph>
+  ] ;
+  ja:namedGraph [
+    ja:graphName  <http://onto.mju.gov.si/pz/dataset/evidenca-registriranih-vozil> ;
+    ja:graph      <#pz-evidenca-registriranih-vozil-graph>
+  ] ;
+  ja:namedGraph [
+    ja:graphName  <http://onto.mju.gov.si/pz/dataset/erar-evidenca-davcnih-dolznikov-in-nepredlagateljev-davcnih-obracunov> ;
+    ja:graph      <#pz-evidenca-dolznikov-in-nepredlagateljev-graph>
+  ] ;
+  ja:namedGraph [
+    ja:graphName  <http://onto.mju.gov.si/pz/dataset/povprecne_bruto_place_v_javnem_sektorju_po_mesecih> ;
+    ja:graph      <#pz-povprecne-bruto-place-v-javnem-sektorju-graph>
+  ]
+  .
+
+<#pz-schema-graph> a ja:MemoryModel ;
+  ja:content [ ja:externalContent <file:../databases/pz.ttl> ] ;
+  .
+
+<#pz-prometne-nesrece-graph> a ja:MemoryModel ;
+  ja:content [ ja:externalContent <file:../databases/prometne_nesrece_mesecno_mnz.ttl> ] ;
+  .
+
+<#pz-vladna-gradiva-graph> a ja:MemoryModel ;
+  ja:content [ ja:externalContent <file:../databases/vladna_gradiva.ttl> ] ;
+  .
+
+<#pz-evidenca-registriranih-vozil-graph> a ja:MemoryModel ;
+  ja:content [ ja:externalContent <file:../databases/evidenca_registriranih_vozil_mzi.ttl> ] ;
+  .
+
+<#pz-evidenca-dolznikov-in-nepredlagateljev-graph> a ja:MemoryModel ;
+  ja:content [ ja:externalContent <file:../databases/evidenca_dolznikov_in_nepredlagateljev_kpk.ttl> ] ;
+  .
+
+<#pz-povprecne-bruto-place-v-javnem-sektorju-graph> a ja:MemoryModel ;
+  ja:content [ ja:externalContent <file:../databases/povprecne_bruto_place_v_javnem_sektorju_po_mesecih.ttl> ] ;
+  .
