@@ -202,6 +202,11 @@ Cilj delavnice je pojasniti, kako iz razdrobljenih javnih podatkov dobimo odgovo
 | ★★★★  | Podatki uporabljajo URI-je za enolično identifikacijo pojmov, kar omogoča povezovanje. | Nabor podatkov o občinah, kjer ima vsaka občina svoj URI.                                 |
 | ★★★★★ | Podatki so povezani z drugimi viri, kar omogoča kontekstualizacijo.                    | Podatki o šolah, povezani z prostorskimi podatki, standardi izobraževanja in demografijo. |
 
+Za začetek bomo uporabili podatke iz [NIO Centralni register prebivalstva (CRP) - Vpogled preko EMŠO](https://nio.gov.si/sl/products/nio%2Bcentralni%2Bregister%2Bprebivalstva%2Bcrp%2Bvpogled%2Bpreko%2Bemso?release=0.1), ki so na voljo v naslednjih Excel datotekah:
+
+> 📊 [`Nabor podatkov NIO CRP.xls`](./assets/data/Nabor%20podatkov%20NIO%20CRP.xls)
+> 📊 [`Sifranti IO CRP.xls`](./assets/data/Sifranti%20IO%20CRP.xls)
+
 </details>
 
 ### 3. Raven 4 ★: semantični opis podatkov z RDF
