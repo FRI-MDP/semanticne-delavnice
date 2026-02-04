@@ -202,10 +202,19 @@ Cilj delavnice je pojasniti, kako iz razdrobljenih javnih podatkov dobimo odgovo
 | ★★★★  | Podatki uporabljajo URI-je za enolično identifikacijo pojmov, kar omogoča povezovanje. | Nabor podatkov o občinah, kjer ima vsaka občina svoj URI.                                 |
 | ★★★★★ | Podatki so povezani z drugimi viri, kar omogoča kontekstualizacijo.                    | Podatki o šolah, povezani z prostorskimi podatki, standardi izobraževanja in demografijo. |
 
-Za začetek bomo uporabili podatke iz [NIO Centralni register prebivalstva (CRP) - Vpogled preko EMŠO](https://nio.gov.si/sl/products/nio%2Bcentralni%2Bregister%2Bprebivalstva%2Bcrp%2Bvpogled%2Bpreko%2Bemso?release=0.1), ki so na voljo v naslednjih Excel datotekah:
+Za začetek bomo uporabili podatke o Centralnem registru prebivalstva (**CRP**) iz [NIO](https://nio.gov.si/sl/products/nio%2Bcentralni%2Bregister%2Bprebivalstva%2Bcrp%2Bvpogled%2Bpreko%2Bemso?release=0.1), ki so na voljo v naslednjih Excel datotekah:
 
-> [📊 `Nabor podatkov NIO CRP.xls`](./assets/data/Nabor%20podatkov%20NIO%20CRP.xls)  
-> [📊 `Sifranti IO CRP.xls`](./assets/data/Sifranti%20IO%20CRP.xls)
+> [📊 `Nabor podatkov NIO CRP.xls`](./assets/data/raw/CRP/Nabor%20podatkov%20NIO%20CRP.xls)  
+> [📊 `Sifranti IO CRP.xls`](./assets/data/raw/CRP/Sifranti%20IO%20CRP.xls)
+
+...
+
+Nadaljujemo s podatki Statističnega urada Republike Slovenije (**SURS**), ki so na voljo na [portalu odprtih podatkov SURS](https://www.stat.si/obcine/sl/Theme/Index/PrebivalstvoStevilo), med tematskimi članki o prebivalstvu. Če želimo pridobiti podatke o številu prebivalcev po občinah za leto 2025 lahko s klikom na [zemljevid](https://gis.stat.si/#) zahtevamo podrobnjši pregled, kjer vnesemo omejitve za leto 2025 in zahtevamo prenos. Ker potrebujemo zgolj podatke o številu prebivalcev, zahtevamo **Prenesi CSV tabelo**, kjer dobimo naslednjo vsebino:
+
+* ZIP datoteka: [📦 `STAGE_data.zip`] z naslednjimi datotekami:
+  * [📊 `data.tsv`],
+  * [`info.html`],
+  * [`info.txt`].
 
 </details>
 
