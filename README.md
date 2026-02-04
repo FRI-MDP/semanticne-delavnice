@@ -53,7 +53,7 @@ Naročilo sofinancirata Republika Slovenija in Evropska unija iz Načrta za okre
 ### 1. Uvod: Zakaj semantično opisovanje podatkov?
 
 <details>
-<summary>Prikaži podrobnosti</summary>
+<summary>Prikaži podrobnosti **1. poglavja**</summary>
 
 #### 1.1 Namen delavnice
 
