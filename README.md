@@ -53,7 +53,7 @@ Naročilo sofinancirata Republika Slovenija in Evropska unija iz Načrta za okre
 ### 1. Uvod: Zakaj semantično opisovanje podatkov?
 
 <details>
-<summary>Prikaži podrobnosti <b>1. poglavja</b></summary>
+<summary>Prikaži podrobnosti</summary>
 
 #### 1.1 Namen delavnice
 
@@ -187,6 +187,9 @@ V tem konkretnem primeru so uporabljeni pojmi, kot so [`NewsArticle`](https://sc
 
 ### 2. Od izvornih podatkov do 5 ★ odprtosti podatkov
 
+<details>
+<summary>Prikaži podrobnosti</summary>
+
 Cilj delavnice bo predvsem pojasniti, kako iz razdrobljenih javnih podatkov dobimo odgovore, ki jih iz posamezne zbirke ne moremo pridobiti. Pri tem pogosto govorimo o [ravneh odprtosti podatkov](https://5stardata.info/), predstavljene v naslednji tabeli.
 
 | Raven | Opis                                                                                   | Primer                                                                                    |
@@ -196,6 +199,8 @@ Cilj delavnice bo predvsem pojasniti, kako iz razdrobljenih javnih podatkov dobi
 | ★★★   | Podatki so v odprtem formatu (npr. CSV namesto Excel).                                 | Datoteka CSV s statistiko prebivalstva iz SURS-a.                                         |
 | ★★★★  | Podatki uporabljajo URI-je za enolično identifikacijo pojmov, kar omogoča povezovanje. | Nabor podatkov o občinah, kjer ima vsaka občina svoj URI.                                 |
 | ★★★★★ | Podatki so povezani z drugimi viri, kar omogoča kontekstualizacijo.                    | Podatki o šolah, povezani z prostorskimi podatki, standardi izobraževanja in demografijo. |
+
+</details>
 
 ### 3. Raven 4 ★: semantični opis podatkov z RDF
 
