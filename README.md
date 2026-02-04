@@ -183,6 +183,8 @@ Opazimo lahko, da je novica semantično opisana z uporabo standarda [schema.org]
 
 V tem konkretnem primeru so uporabljeni pojmi, kot so [`NewsArticle`](https://schema.org/NewsArticle) (novica), [`headline`](https://schema.org/headline) (naslov), [`image`](https://schema.org/image) (slika), [`datePublished`](https://schema.org/datePublished) (datum objave), [`author`](https://schema.org/author) (avtor) in [`publisher`](https://schema.org/publisher) (izdajatelj). Ti pojmi omogočajo strukturirano predstavitev ključnih informacij o novici, kar olajša iskanje, indeksiranje in povezovanje z drugimi vsebinami na spletu.
 
+Poznamo pa še številne druge formalne opredelitve v obliki besednjakov in ontologij, kot so npr. [**F**riend **O**f **A** **F**riend (**FOAF**)](http://xmlns.com/foaf/spec/), [**D**ublin **C**ore (**DC**)]https://www.dublincore.org/specifications/dublin-core/dcmi-terms/), SKOS, in seveda DCAT, ki se uporablja predvsem na področju podatkovnih naborov podatkov.
+
 </details>
 
 ### 2. Od izvornih podatkov do 5 ★ odprtosti podatkov
@@ -190,7 +192,7 @@ V tem konkretnem primeru so uporabljeni pojmi, kot so [`NewsArticle`](https://sc
 <details>
 <summary>Prikaži podrobnosti</summary>
 
-Cilj delavnice bo predvsem pojasniti, kako iz razdrobljenih javnih podatkov dobimo odgovore, ki jih iz posamezne zbirke ne moremo pridobiti. Pri tem pogosto govorimo o [ravneh odprtosti podatkov](https://5stardata.info/), predstavljene v naslednji tabeli.
+Cilj delavnice je pojasniti, kako iz razdrobljenih javnih podatkov dobimo odgovore, ki jih iz posamezne zbirke ne moremo pridobiti. Pri tem pogosto govorimo o [ravneh odprtosti podatkov](https://5stardata.info/), predstavljene v naslednji tabeli.
 
 | Raven | Opis                                                                                   | Primer                                                                                    |
 | :---- | :------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------- |
