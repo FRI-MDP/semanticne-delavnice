@@ -443,7 +443,7 @@ obcina:apace shema:naziv "Apače" .
 obcina:apace shema:steviloPrebivalcev 3563 .
 ```
 
-Dodatno lahko uporabimo tudi **zapis kratkih oblik** za še bolj jedrnat zapis, saj opazimo, da se določeni osebki ponavljajo.
+Dodatno lahko uporabimo tudi **zapis kratkih oblik** za še bolj jedrnat zapis, saj opazimo, da se določeni osebki ponavljajo. Namesto `rdf:type` lahko uporabimo tudi `a`.
 
 ```turtle
 @prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -503,6 +503,212 @@ Ko naši podatki dosežejo raven 4 ★, dosežemo stanje, kjer podatki postanejo
 </details>
 
 ### 4. Formalizacija podatkovnega modela z ontologijami
+
+<details>
+<summary>Prikaži podrobnosti</summary>
+
+#### 4.1 Zakaj RDF sam po sebi ni dovolj?
+
+V prejšnjem koraku smo podatke zapisali v obliki RDF in jim dodelili URI-je, s čimer smo dosegli enolično identifikacijo entitet, osnovno povezljivost in strojno berljiv ter razširljiv zapis.
+
+Vendar nam RDF sam po sebi še ne pove:
+
+- kaj natančno pomeni pojem `Obcina`,
+- katere lastnosti smiselne,
+- ali ima lahko občina več nazivov,
+- ali je `steviloPrebivalcev` obvezen podatek.
+
+Brez uporabe ontologije so ta pravila implicitna, zapisana zgolj v dokumentaciji ali v obliki tacitnega znanja razvijalcev in so nedostopna računalniški interpretaciji. Ontologija ta pravila **formalizira**, **eksplicitno opredeli** pomen pojmov, njihove lastnosti in medsebojne odnose ter jih naredi **strojno razumljive**.
+
+#### 4.2 Kaj je ontologija (v kontekstu delavnice)?
+
+V kontekstu delavnice je **ontologija** formalni opis pojmov, njihovih lastnosti in medsebojnih odnosov v določenem področju (npr. občine, šole).
+
+Ontologija opredeljuje:
+
+- kaj obstaja (tj. razredi, npr. `Obcina`, `Naselje`, `UpravnaEnota`),
+- kako je opisano (tj. lastnosti, npr. `naziv`, `steviloPrebivalcev`),
+- kako so pojmi povezani (tj. relacije, npr. `jeDelObcine`, `imaNaselje`),
+- pravila in omejitve (npr. `Obcina` mora imeti vsaj en `naziv`).
+
+> Ontologija ni slovar pojmov, niti podatkovna baza - je **model pomena**.
+
+#### 4.3 Ločevanje modela in podatkov: TBox in ABox
+
+Pri delu z ontologijami jasno ločimo dve ravni:
+
+- **TBox (Terminological Box)**: opisuje **strukturo in pravila** pojmov v ontologiji (npr. `Obcina` je vrsta `AdministrativnaEnota`, `steviloPrebivalcev` je lastnost, ki se nanaša na `Obcina`),
+- **ABox (Assertional Box)**: vsebuje **konkretne podatke** oz. **primerke** in njihove lastnosti (npr. `obcina:ajdovscina` je primerek `Obcina`, `obcina:ajdovscina` ima `steviloPrebivalcev` `19895`).
+
+Takšno ločevanje je pomembno, ker omogoča ponovno uporabo istega modela, loči domensko znanje od podatkov in olajša vzdrževanje in nadgradnje.
+
+#### 4.4 Uvoz podatkov TTL v orodje za upravljanje ontologij
+
+V tem koraku se še ne bomo ukvarjali z ontologijo, ampak bo začeli z **realnimi podatki SURS**, ki smo jih v predhodnjem koraku pretvorili iz CSV v RDF/TTL.
+
+Trenutna datoteka vsebuje:
+
+- posamezne občine kot entitete RDF,
+- osnovne lastnosti (npr. naziv, število prebivalce, SURS ID),
+- vendar **še nima formalnega modela** (TBox).
+
+Uporabili bomo orodje [Protégé](https://protege.stanford.edu/), ki je odprtokodno orodje za urejanje ontologij in RDF podatkov.
+
+Zahtevali (`File` &rarr; `Open`) bomo datoteko [`SURS_obcine.ttl`](./assets/data/processed/SURS_obcine.ttl), ki predstavlja razširitev našega predhodnjega primera z vsemi občinami, ki so na voljo v izvorni SURS-ovi datoteki [`data.tsv`](./assets/data/raw/SURS/data.tsv).
+
+<p align="center">
+  <img src="./assets/img/Protege_start_SURS.png" alt="Začetni pogled orodja Protégé" width="800px" />
+</p>
+
+Na začetnem zaslonu na zgornji sliki opazimo povzetek vsebine naših podatkov, kjer mogoče izpostavimo nekaj ključnih informacij:
+
+- **število trditev** _(angl. Axiom)_ je **848**, kar ustreza številu trojčkov RDF v naši datoteki (`212` občin × `4` trditve na občino = `848`),
+- **število primerkov** _(angl. Individual count)_ je **212**, kar ustreza številu občin v Sloveniji (glede na podatke SURS za leto 2025),
+- **število lastnosti** _(angl. Annotation Property count)_ je **3**, kar ustreza lastnostim, ki smo jih definirali v našem RDF zapisu (`idObcinaSurs`, `naziv`, `steviloPrebivalcev`).
+
+Po uvozu v Protégé lahko v zavihku `Individuals` (`Entities` &rarr; `Individuals`) pregledamo podatke, kjer vidimo seznam vseh občin in njihove lastnosti. Če izberemo posamezen primerek (npr. `ajdovscina`) lahko vidimo njegove lastnosti in vrednosti.
+
+<p align="center">
+  <img src="./assets/img/Protege_individuals_SURS.png" alt="Primerki podatkov SURS v Protégé" width="800px" />
+</p>
+
+V zavihku `Classes` (`Entities` &rarr; `Classes`) pa vidimo, da imamo opredeljen zgolj RDF razred `Obcina`, ki je uporabljen v našem primeru, ni pa dodatno opisan. Prisoten je zgolj seznam primerkov tega razreda.
+
+<p align="center">
+  <img src="./assets/img/Protege_classes_SURS.png" alt="Razred podatkov SURS v Protégé" width="800px" />
+</p>
+
+> To je tipično začetno stanje, kjer imamo **podatke (ABox)**, vendar še **nismo definirali modela (TBox)** oz. je le-ta zelo osnoven. V naslednjem koraku bomo začeli z gradnjo ontologije, ki bo formalizirala pomen naših podatkov.
+
+#### 4.5 Prvi korak formalizacije: opis razreda
+
+Naslednji korak je, da iz obstoječih podatkov SURS **izluščimo pojme**, ki jih implicitno že uporabljamo.
+
+Pri tem ugotovimo, da opisujemo **občine**, ki so opisane s SURS-ovim ID-jem, imenom in številom prebivalcev za določeno leto.
+
+To vodi do prvega osnovnega razreda `Obcina`, ki pa je implicitno že opredeljen, saj vsi naši primerki pripadajo temu razredu, kot to prikazuje naslednji primer.
+
+```turtle
+obcina:ajdovscina a shema:Obcina
+```
+
+Sedaj bomo ta nov razred `Obcina` formalno definirali v našem modelu, in sicer lahko dodamo naslednje trditve in ponovno naložimo datoteko v Protégé:
+
+```turtle
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+
+shema:Obcina a owl:Class ;
+  rdfs:label "Občina"@sl ;
+  rdfs:label "Municipality"@en .
+```
+
+<p align="center">
+  <img src="./assets/img/Protege_classes_label_SURS.png" alt="Oznaka razreda podatkov SURS v Protégé" width="800px" />
+</p>
+
+Lahko pa s klikom na `+` pri `Annotations` novo oznako dodamo tudi ročno, kjer najprej izberemo `rdfs:label`, v polje `Value` pa vnesemo oznako razreda v španskem jeziku (npr. `Municipio`) in jo označimo z jezikovno oznako `@es`, kot prikazuje spodnja slika.
+
+<p align="center">
+  <img src="./assets/img/Protege_label_add_SURS.png" alt="Dodajanje oznake razreda podatkov SURS v Protégé" width="800px" />
+</p>
+
+Posledično se v izvorni kodi TTL doda naslednja trditev za `shema:Obcina`:
+
+```turtle
+shema:Obcina rdf:type owl:Class ;
+             rdfs:label "Municipality"@en ,
+                        "Občina"@sl ,
+                        "Municipio"@es .
+```
+
+> Za lastnost smo uporabili [`rdfs:label`](https://www.w3.org/TR/rdf-schema/#ch_label) kot standardno lastnost za opisovanje oznak pojmov, ki je del [RDF Schema (RDFS)](https://www.w3.org/TR/rdf-schema/).
+
+Ko ontologijo shranimo z orodjem Protégé, pa opazimo, da je prisotnih nekaj dodatnih trditev, ki jih Protégé samodejno doda za boljšo interoperabilnost in skladnost z OWL standardom.
+
+To je npr. opredelitev lastnosti (ki jih še nismo formalno definirali, ampak so implicitno prisotne v naših podatkih):
+
+```turtle
+shema:idObcinaSurs rdf:type owl:AnnotationProperty .
+shema:naziv rdf:type owl:AnnotationProperty .
+shema:steviloPrebivalcev rdf:type owl:AnnotationProperty .
+```
+
+Prav tako vsakemu primerku (občini) doda trditev, da je [`owl:NamedIndividual`](https://www.w3.org/TR/owl2-syntax/#Named_Individuals), kar pomeni, da gre za konkretno entiteto, ki je del naše ontologije:
+
+```turtle
+obcina:ajdovscina rdf:type owl:NamedIndividual ,
+                           shema:Obcina ;
+                  shema:idObcinaSurs "001" ;
+                  shema:naziv "Ajdovščina" ;
+                  shema:steviloPrebivalcev 19895 .
+```
+
+Prav tako se opredeli osnovni prostor imen z uporabo `@base` in aktivno ontologijo, kar omogoča krajši zapis URI-jev v datoteki.
+
+```turtle
+@base <https://onto.mdp.gov.si/shema/> .
+<https://onto.mdp.gov.si/shema/> a owl:Ontology .
+```
+
+#### 4.6 Podatkovne lastnosti
+
+Naslednji korak je formalizacija lastnosti, ki jih podatki SURS že vsebujejo.
+
+Iz vsebine lahko razberemo naslednje lastnosti:
+
+- enolični identifikator občine po SURS-u,
+- ime občine in
+- število prebivalcev občine.
+
+V grafičnem vmesniku Protégé (`Entities` &rarr; `Data properties` &rarr; `Create a new Data property`) lahko te lastnosti dodamo kot **podatkovne lastnosti** _(angl. Data Properties)_, ker se nanašajo na vrednosti, ki so literali (npr. besedilo, število).
+
+Podatkovni lastnosti `idObcinaSurs` določimo naslednje atribute:
+
+- ime _(angl. Name)_: `idObcinaSurs`,
+- domena _(angl. Domain)_: `Obcina`,
+- obseg _(angl. Range)_: `xsd:string`,
+- oznake _(angl. Annotation)_: `SURS ID občine`@sl.
+
+Posledično se v izvorni kodi TTL dodajo naslednje trditve:
+
+```turtle
+shema:idObcinaSurs a owl:DatatypeProperty ;
+                   rdfs:domain shema:Obcina ;
+                   rdfs:range xsd:string ;
+                   rdfs:label "SURS ID občine"@sl .
+```
+
+Podobno dodajmo še lastnosti `naziv` in `steviloPrebivalcev` z ustreznimi atributi, pri čemer `steviloPrebivalcev` določimo kot `xsd:integer`, saj gre za številsko vrednost.
+
+```turtle
+shema:naziv a owl:DatatypeProperty ;
+            rdfs:domain shema:Obcina ;
+            rdfs:range xsd:string ;
+            rdfs:label "naziv"@sl .
+
+shema:steviloPrebivalcev a owl:DatatypeProperty ;
+                         rdfs:domain shema:Obcina ;
+                         rdfs:range xsd:integer ;
+                         rdfs:label "število prebivalcev"@sl .
+```
+
+Ob ponovnem nalaganju datoteke v Protégé lahko sedaj v zavihku `Data properties` vidimo naše formalno definirane lastnosti z njihovimi atributi.
+
+<p align="center">
+  <img src="./assets/img/Protege_data_properties_SURS.png" alt="Podatkovne lastnosti podatkov SURS v Protégé" width="800px" />
+</p>
+
+Izvorna koda primera do tega trenutka je na voljo v [`SURS_obcine_dp.ttl`](./assets/data/processed/SURS_obcine_dp.ttl), kjer so dodane formalne definicije razreda `Obcina` in podatkovnih lastnosti `idObcinaSurs`, `naziv` in `steviloPrebivalcev`.
+
+#### 4.7 Nadgradnja z objektnimi lastnostmi
+
+Pri podatkih, ki jih trenutno imamo na voljo, je zagotovo na mestu vprašanje kako bi vključili še zgodovinske podatke ali podatke za naslednja leta.
+
+Namesto da ima občina `steviloPrebivalcev` kot enostavno številsko vrednost, bi lahko imeli **povezavo na drug primerek**, ki predstavlja **meritev števila prebivalcev za določeno leto**.
+
+Vpeljali bi lahko razred `MeritevPrebivalcev`, ki bi imel lastnosti `leto` in `vrednost`, ter nato v razred `Obcina` dodali **objektno lastnost** _(angl. Object Property)_ `imaMeritevPrebivalcev`, ki bi kazala na primerek `MeritevPrebivalcev`.
+
+</details>
 
 ### 5. Raven 5 ★: povezani podatki in zunanji viri
 
