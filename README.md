@@ -72,7 +72,7 @@ Realni problem, s katerim se srečamo, je situacija, kjer podatki obstajajo, ven
 
 Primer takšnega realnega vprašanja je:
 
-> _"Katere upravne enote imajo največ prebivalcev, katere šole imajo tam sedež in kakšna je nadmorska višina teh območij?"_
+> _"Katere občine imajo največ prebivalcev, katere šole imajo tam sedež in kakšna je nadmorska višina teh območij?"_
 
 Podatki sicer že obstajajo, vendar:
 
@@ -338,22 +338,22 @@ Kot primer lahko izpostavimo `Ajdovščina` v CRP in `Ajdovščina` v SURS, ki z
 Če želimo rešiti ta problem, moramo vpeljati:
 
 - **enolične identifikatorje** (URI-je), ki bodo jasno določili, da gre za isto entiteto,
-- **formalni opis pomena** (ontologijo), ki bo opredelila, kaj je občina, kakšne so njene lastnosti in kako se povezuje z drugimi pojmi,
+- **formalni opis pomena** (to kasneje zajamemo z ontologijo), ki bo opredelila, kaj je občina, kakšne so njene lastnosti in kako se povezuje z drugimi pojmi,
 - **model, ki presega tabelarično strukturo** in omogoča predstavitev kompleksnih odnosov med pojmi (RDF).
 
 #### 3.2 RDF: opis podatkov v obliki trojčkov
 
 [**RDF** (Resource Description Framework)](https://www.w3.org/RDF/) je standard za predstavitev podatkov v obliki **trojčkov**:
 
-- **osebek** _(angl. subject)_ - kaj opisujemo (npr. `Upravna enota Ljubljana`),
-- **povedek** _(angl. predicate)_ - katero lastnost opisujemo (npr. `ima sedež v`),
-- **predmet** _(angl. object)_ - vrednost ali povezava (npr. `Ljubljana`).
+- **osebek** _(angl. subject)_ - kaj opisujemo (npr. `Občina Ajdovščina`),
+- **povedek** _(angl. predicate)_ - katero lastnost opisujemo (npr. `ima število prebivalcev`),
+- **predmet** _(angl. object)_ - vrednost ali povezava (npr. `19895`).
 
 Takšna struktura omogoča eksplicitno izražati pomen, povezovanje podatkov v graf in razširljivost brez spremembe obstoječih zapisov.
 
 #### 3.3 URI: enolična identifikacija pojmov
 
-Osnovna jezika RDF je uporaba URI-jev, ki predstavljajo stabilne, globalno enolične in spletno naslovljive identifikatorje.
+Osnova jezika RDF je uporaba URI-jev, ki predstavljajo stabilne, globalno enolične in spletno naslovljive identifikatorje.
 
 Namesto npr. `OBC_ID=1` uporabimo npr. `https://onto.mdp.gov.si/obcina/ajdovscina`, ki jasno identificira občino Ajdovščina. S tem odpravimo dvoumnost, omogočimo povezovanje z drugimi viri in jasno ločimo pojem od njegovega zapisa v tabeli.
 
@@ -363,18 +363,142 @@ Namesto npr. `OBC_ID=1` uporabimo npr. `https://onto.mdp.gov.si/obcina/ajdovscin
 
 RDF podatke lahko zapišemo v različnih formatih, eden izmed najbolj berljivih je **Turtle (TTL)**, ker je človeško berljiv in pogosto uporabljen v praksi.
 
-Primer zapisa občine v obliki TTL:
+Osredotočimo se na podatke v obliki TSV, ki smo jih izvozili iz SURS-a:
+
+`data.tsv`
+
+```tsv
+ob_id ob_ime              tot_p
+001   Ajdovščina          19895
+213   Ankaran             3446
+195   Apače               3563
+002   Beltinci            8129
+148   Benedikt            2738
+149   "Bistrica ob Sotli" 1335
+003   Bled                8154
+150   Bloke               1554
+004   Bohinj              5238
+```
+
+V TSV datoteki so stolpci ločeni s tabulatorji (ne s presledki). Vsaka vrstica predstavlja eno občino, stolpci pa njene lastnosti. Pri pretvorbi v RDF bomo vsako vrstico pretvorili v več trojčkov: en trojček za tip entitete (npr. `shema:Obcina`) in po en trojček za vsako lastnost (npr. naziv, število prebivalcev).
+
+Za razumevanje trojčkov je koristen “polni” zapis s celotnimi URI-ji. V praksi pa skoraj vedno uporabimo predpone (`@prefix`), da je zapis bistveno bolj berljiv.
+
+Sedaj v RDF obliko s serializacijo v TTL zapišimo podatke o prvi občini, `Ajdovščina`:
 
 ```turtle
+https://onto.mdp.gov.si/obcina/ajdovscina http://www.w3.org/1999/02/22-rdf-syntax-ns#type https://onto.mdp.gov.si/shema/Obcina .
+https://onto.mdp.gov.si/obcina/ajdovscina https://onto.mdp.gov.si/shema/idObcinaSurs "001" .
+https://onto.mdp.gov.si/obcina/ajdovscina https://onto.mdp.gov.si/shema/naziv "Ajdovščina" .
+https://onto.mdp.gov.si/obcina/ajdovscina https://onto.mdp.gov.si/shema/steviloPrebivalcev 19895 .
+```
+
+Pri zapisu v obliko trojčkov smo si izbrali URI `https://onto.mdp.gov.si/obcina/ajdovscina` za identifikacijo občine Ajdovščina, lastnosti `https://onto.mdp.gov.si/shema/idObcinaSurs` za SURS-ov enolični identifikator, `https://onto.mdp.gov.si/shema/naziv` za poimenovanje in `https://onto.mdp.gov.si/shema/steviloPrebivalcev` za število prebivalcev. Uporabili smo tudi standardni RDF predikat `http://www.w3.org/1999/02/22-rdf-syntax-ns#type`, da opredelimo, da gre za entiteto tipa `Obcina`.
+
+Opazimo, da je `https://onto.mdp.gov.si/shema/steviloPrebivalcev` številska vrednost, zato je zapisana brez narekovajev, medtem ko sta `https://onto.mdp.gov.si/shema/idObcinaSurs` in `https://onto.mdp.gov.si/shema/naziv` besedilni vrednosti in sta zapisani z narekovaji. V RDF zapisu so to [literali](https://www.w3.org/TR/rdf11-concepts/#section-Graph-Literal); tipe (npr. `xsd:integer` ali `xsd:string`) lahko kasneje tudi eksplicitno določimo.
+
+V praksi bomo za vsako občino hranili oba identifikatorja (npr. šifro CRP in SURS) kot lastnosti iste entitete. S tem naredimo prvi korak k usklajevanju virov, ne da bi podatke podvajali.
+
+> Če na podatke v CSV obliki gledamo kot 2D tabelo, potem posamezno vrstico tabele pretvorimo v več RDF trojčkov, kjer vsak stolpec predstavlja lastnost, vrstica pa subjekt (entiteto). S tem smo podatke iz tabelarične oblike pretvorili v grafovno obliko, ki omogoča bolj fleksibilno predstavitev in povezovanje podatkov.
+
+Dodamo lahko še nekaj dodatnih občin:
+
+```turtle
+https://onto.mdp.gov.si/obcina/ajdovscina http://www.w3.org/1999/02/22-rdf-syntax-ns#type https://onto.mdp.gov.si/shema/Obcina .
+https://onto.mdp.gov.si/obcina/ajdovscina https://onto.mdp.gov.si/shema/idObcinaSurs "001" .
+https://onto.mdp.gov.si/obcina/ajdovscina https://onto.mdp.gov.si/shema/naziv "Ajdovščina" .
+https://onto.mdp.gov.si/obcina/ajdovscina https://onto.mdp.gov.si/shema/steviloPrebivalcev 19895 .
+
+https://onto.mdp.gov.si/obcina/ankaran http://www.w3.org/1999/02/22-rdf-syntax-ns#type https://onto.mdp.gov.si/shema/Obcina .
+https://onto.mdp.gov.si/obcina/ankaran https://onto.mdp.gov.si/shema/idObcinaSurs "213" .
+https://onto.mdp.gov.si/obcina/ankaran https://onto.mdp.gov.si/shema/naziv "Ankaran" .
+https://onto.mdp.gov.si/obcina/ankaran https://onto.mdp.gov.si/shema/steviloPrebivalcev 3446 .
+
+https://onto.mdp.gov.si/obcina/apace http://www.w3.org/1999/02/22-rdf-syntax-ns#type https://onto.mdp.gov.si/shema/Obcina .
+https://onto.mdp.gov.si/obcina/apace https://onto.mdp.gov.si/shema/idObcinaSurs "195" .
+https://onto.mdp.gov.si/obcina/apace https://onto.mdp.gov.si/shema/naziv "Apače" .
+https://onto.mdp.gov.si/obcina/apace https://onto.mdp.gov.si/shema/steviloPrebivalcev 3563 .
+```
+
+Ko se količina podatkov povečuje, postane tak zapis manj pregleden. Zato lahko uporabimo **predpone** za skrajšanje URI-jev in izboljšanje berljivosti.
+
+```turtle
+@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix obcina: <https://onto.mdp.gov.si/obcina/> .
+@prefix shema:  <https://onto.mdp.gov.si/shema/> .
+
+obcina:ajdovscina a shema:Obcina .
+obcina:ajdovscina shema:idObcinaSurs "001" .
+obcina:ajdovscina shema:naziv "Ajdovščina" .
+obcina:ajdovscina shema:steviloPrebivalcev 19895 .
+
+obcina:ankaran a shema:Obcina .
+obcina:ankaran shema:idObcinaSurs "213" .
+obcina:ankaran shema:naziv "Ankaran" .
+obcina:ankaran shema:steviloPrebivalcev 3446 .
+
+obcina:apace a shema:Obcina .
+obcina:apace shema:idObcinaSurs "195" .
+obcina:apace shema:naziv "Apače" .
+obcina:apace shema:steviloPrebivalcev 3563 .
+```
+
+Dodatno lahko uporabimo tudi **zapis kratkih oblik** za še bolj jedrnat zapis, saj opazimo, da se določeni osebki ponavljajo.
+
+```turtle
+@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix obcina: <https://onto.mdp.gov.si/obcina/> .
 @prefix shema:  <https://onto.mdp.gov.si/shema/> .
 
 obcina:ajdovscina a shema:Obcina ;
+    shema:idObcinaSurs "001" ;
     shema:naziv "Ajdovščina" ;
     shema:steviloPrebivalcev 19895 .
+
+obcina:ankaran a shema:Obcina ;
+    shema:idObcinaSurs "213" ;
+    shema:naziv "Ankaran" ;
+    shema:steviloPrebivalcev 3446 .
+
+obcina:apace a shema:Obcina ;
+    shema:idObcinaSurs "195" ;
+    shema:naziv "Apače" ;
+    shema:steviloPrebivalcev 3563 .
 ```
 
-> TO-DO: Razmisli kako dodati razreda (a)!?
+Če gre pri trojčkih RDF za ponavljanje osebkov, na koncu vrstice uporabimo podpičje `;` in v novi vrstici izpustimo osebek. Če pa gre za ponavljanje osebkov in povedkov, pa uporabimo vejico `,` in v novi vrstici izpustimo osebek in povedek.
+
+#### 3.5 Kako določimo URI-je?
+
+Pri prehodu na raven 4 ★ je ena od ključnih odločitev, kako bomo entitetam dodelili **stabilne** in **smiselne URI-je**. Pri tem upoštevamo nekaj osnovnih načel:
+
+- URI naj se s časom ne spreminja (tudi če se spremeni naziv entitete) in naj bo **stabilen**.
+- URI naj bo **berljiv** in človeku razumljiv.
+- URI mora biti znotraj problemske domene **enoličen** (v idealnem primeru tudi globalno).
+- **Ne** uporabljajte **posebnih znakov**, zgolj majhne črke, vezaje, brez presledkov, šumnike pravilom pretvorimo (`č` → `c`, `š` → `s`, `ž` → `z`).
+- **Izogibanje internim enoličnim identifikatorjem kot edinem ključu** - če so ID-ji vezani na konkreten sistem (npr. Excel šifrant), jih pogosto hranimo kot lastnost (npr. `shema:idObcinaSurs`), ne pa nujno kot edini del URI-ja.
+
+V okviru delavnice bomo uporabljali preprost vzorec:
+
+- za entitete: `https://onto.mdp.gov.si/obcina/{naziv-obcine}`
+- za pojme v shemi/modelu: `https://onto.mdp.gov.si/shema/{naziv-pojma}`
+
+S tem ločimo:
+
+- **entitete** (npr. `obcina:ajdovscina`), ki predstavljajo konkretne stvari v realnem svetu,
+- **pojme** (npr. `shema:Obcina`, `shema:naziv`, `shema:steviloPrebivalcev`), ki predstavljajo lastnosti, relacije ali kategorije, ki jih uporabljamo za opis entitet.
+
+#### 3.6 Kaj dobimo z ravnjo 4 ★?
+
+Ko podatke zapišemo v RDF in uporabimo URI-je, dosežemo več kot zgolj zapis v drugem formatu:
+
+- pri imenih ni več dvoumnosti, saj imamo **enolično identifikacijo** vsake entitete,
+- **povezljivost** med različnimi viri (npr. isti URI se lahko uporablja v CRP in SURS kontekstu),
+- **grafovska struktura** podatkov, ki ni omejena zgolja na 2D tabelo, ampak omogoča predstavitev kompleksnih odnosov med pojmi,
+- boljšo osnovo za **poizvedovanje** (SPARQL) in kasneje tudi **sklepanje**,
+- predpogoj za naslednji korak **formalizacije pomena z ontologijo**, kar predstavimo v nadaljevanju.
+
+Ko naši podatki dosežejo raven 4 ★, dosežemo stanje, kjer podatki postanejo dejansko interoperabilni na semantični ravni - ne le prenosljivi, ampak tudi razumljivi in povezljivi. To je ključni korak k temu, da lahko podatke dejansko uporabimo za odgovarjanje na kompleksna vprašanja, ki zahtevajo integracijo več virov.
 
 </details>
 
