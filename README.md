@@ -272,9 +272,9 @@ S tem postopkom zapisa v obliki CSV smo **izboljšali dostopnost**, **ne** pa š
 Nadaljujemo s podatki Statističnega urada Republike Slovenije (**SURS**), ki so na voljo na [portalu odprtih podatkov SURS](https://www.stat.si/obcine/sl/Theme/Index/PrebivalstvoStevilo), med tematskimi članki o prebivalstvu. Če želimo pridobiti podatke o številu prebivalcev po občinah za leto 2025 lahko s klikom na [zemljevid](https://gis.stat.si/#) zahtevamo podrobnjši pregled, kjer vnesemo omejitve za leto 2025 in zahtevamo prenos. Ker potrebujemo zgolj podatke o številu prebivalcev, zahtevamo **Prenesi CSV tabelo**, kjer dobimo naslednjo vsebino:
 
 - Datoteka ZIP 📦 `STAGE_data.zip` z naslednjimi datotekami:
-  - [📊 `data.tsv`](./assets/data/raw/SURS/data.tsv),
-  - [📄 `info.html`](./assets/data/raw/SURS/info.html),
-  - [📝 `info.txt`](./assets/data/raw/SURS/info.txt).
+  - [📊 `data.tsv`](./assets/data/raw/SURS/2025/data.tsv),
+  - [📄 `info.html`](./assets/data/raw/SURS/2025/info.html),
+  - [📝 `info.txt`](./assets/data/raw/SURS/2025/info.txt).
 
 `data.tsv`
 
@@ -702,11 +702,41 @@ Izvorna koda primera do tega trenutka je na voljo v [`SURS_obcine_dp.ttl`](./ass
 
 #### 4.7 Nadgradnja z objektnimi lastnostmi
 
-Pri podatkih, ki jih trenutno imamo na voljo, je zagotovo na mestu vprašanje kako bi vključili še zgodovinske podatke ali podatke za naslednja leta.
+Pri podatkih, ki jih trenutno imamo na voljo, je zagotovo na mestu vprašanje - kako bi vključili še zgodovinske podatke ali podatke za naslednja leta.
 
 Namesto da ima občina `steviloPrebivalcev` kot enostavno številsko vrednost, bi lahko imeli **povezavo na drug primerek**, ki predstavlja **meritev števila prebivalcev za določeno leto**.
 
 Vpeljali bi lahko razred `MeritevPrebivalcev`, ki bi imel lastnosti `leto` in `vrednost`, ter nato v razred `Obcina` dodali **objektno lastnost** _(angl. Object Property)_ `imaMeritevPrebivalcev`, ki bi kazala na primerek `MeritevPrebivalcev`.
+
+Najprej dodajmo razred `MeritevPrebivalcev` in nove lastnosti, povezane z njim. Atribut `leto` določimo kot `xsd:gYear`, saj gre za letnico, medtem ko `vrednost` ostane `xsd:integer`.
+
+```turtle
+shema:MeritevPrebivalcev a owl:Class ;
+                          rdfs:label "Meritev števila prebivalcev"@sl .
+
+shema:leto a owl:DatatypeProperty ;
+            rdfs:domain shema:MeritevPrebivalcev ;
+            rdfs:range xsd:gYear ;
+            rdfs:label "leto"@sl .
+
+shema:vrednost a owl:DatatypeProperty ;
+                rdfs:domain shema:MeritevPrebivalcev ;
+                rdfs:range xsd:integer ;
+                rdfs:label "vrednost"@sl .
+```
+
+Posledično lahko obstoječo podatkovno lastnost `steviloPrebivalcev` nadomestimo z novo objektno lastnostjo `imaMeritevPrebivalcev`, ki bo kazala na primerek `MeritevPrebivalcev`.
+
+```turtle
+shema:imaMeritevPrebivalcev a owl:ObjectProperty ;
+                             rdfs:domain shema:Obcina ;
+                             rdfs:range shema:MeritevPrebivalcev ;
+                             rdfs:label "ima meritev števila prebivalcev"@sl .
+```
+
+<p align="center">
+  <img src="./assets/img/Protege_object_properties_SURS.png" alt="Objektna lastnost podatkov SURS v Protégé" width="800px" />
+</p>
 
 </details>
 
