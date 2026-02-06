@@ -562,9 +562,9 @@ Zahtevali (`File` &rarr; `Open`) bomo datoteko [`SURS_obcine.ttl`](./assets/data
 
 Na začetnem zaslonu na zgornji sliki opazimo povzetek vsebine naših podatkov, kjer mogoče izpostavimo nekaj ključnih informacij:
 
-- **število trditev** _(angl. Axiom)_ je **848**, kar ustreza številu trojčkov RDF v naši datoteki (`212` občin × `4` trditve na občino = `848`),
+- **število trditev** _(angl. Axiom)_ je **848**, kar predstavlja število aksiomov, ki jih Protégé interpretira iz datoteke, pri čistem zapisu RDF to pogosto sovpada s trojčki (`212` občin × `4` trditve na občino = `848`),
 - **število primerkov** _(angl. Individual count)_ je **212**, kar ustreza številu občin v Sloveniji (glede na podatke SURS za leto 2025),
-- **število lastnosti** _(angl. Annotation Property count)_ je **3**, kar ustreza lastnostim, ki smo jih definirali v našem RDF zapisu (`idObcinaSurs`, `naziv`, `steviloPrebivalcev`).
+- **število lastnosti** _(angl. Annotation Property count)_ je **3**, kar ustreza lastnostim (`idObcinaSurs`, `naziv`, `steviloPrebivalcev`), ki jih je Protégé tako interpretiral, ker še niso formalno opredeljene kot podatkovne lastnosti.
 
 Po uvozu v Protégé lahko v zavihku `Individuals` (`Entities` &rarr; `Individuals`) pregledamo podatke, kjer vidimo seznam vseh občin in njihove lastnosti. Če izberemo posamezen primerek (npr. `ajdovscina`) lahko vidimo njegove lastnosti in vrednosti.
 
@@ -589,8 +589,10 @@ Pri tem ugotovimo, da opisujemo **občine**, ki so opisane s SURS-ovim ID-jem, i
 To vodi do prvega osnovnega razreda `Obcina`, ki pa je implicitno že opredeljen, saj vsi naši primerki pripadajo temu razredu, kot to prikazuje naslednji primer.
 
 ```turtle
-obcina:ajdovscina a shema:Obcina
+obcina:ajdovscina a shema:Obcina .
 ```
+
+> V Protégé je privzeto prikazano lokalno ime `Obcina`, v ozadju pa gre za URI `shema:Obcina`.
 
 Sedaj bomo ta nov razred `Obcina` formalno definirali v našem modelu, in sicer lahko dodamo naslednje trditve in ponovno naložimo datoteko v Protégé:
 
@@ -632,6 +634,8 @@ shema:idObcinaSurs rdf:type owl:AnnotationProperty .
 shema:naziv rdf:type owl:AnnotationProperty .
 shema:steviloPrebivalcev rdf:type owl:AnnotationProperty .
 ```
+
+> Ker lastnosti v začetnem SURS TTL niso formalno opredeljene, jih Protégé interpretira kot **oznake** (annotations) in jih zato označi kot `owl:AnnotationProperty`. V naslednjem koraku bomo te lastnosti formalno definirali kot **podatkovne lastnosti** (data properties) z uporabo `owl:DatatypeProperty`, kar bo omogočilo boljšo interpretacijo in uporabo teh lastnosti v našem modelu.
 
 Prav tako vsakemu primerku (občini) doda trditev, da je [`owl:NamedIndividual`](https://www.w3.org/TR/owl2-syntax/#Named_Individuals), kar pomeni, da gre za konkretno entiteto, ki je del naše ontologije:
 
@@ -706,6 +710,8 @@ Pri podatkih, ki jih trenutno imamo na voljo, je zagotovo na mestu vprašanje - 
 
 Namesto da ima občina `steviloPrebivalcev` kot enostavno številsko vrednost, bi lahko imeli **povezavo na drug primerek**, ki predstavlja **meritev števila prebivalcev za določeno leto**.
 
+> To je tipičen primer, kjer se izkaže grafovska struktura v primerjavi s tabelarično. Atribut `steviloPrebivalcev` v resnici ni lastnost občine, ampak lastnost opazovanja občine skozi leta. Zato vrednost modeliramo ločeno, da lahko imamo več meritev za različna leta, ne da bi morali spreminjati strukturo razreda `Obcina`.
+
 Vpeljali bi lahko razred `MeritevPrebivalcev`, ki bi imel lastnosti `leto` in `vrednost`, ter nato v razred `Obcina` dodali **objektno lastnost** _(angl. Object Property)_ `imaMeritevPrebivalcev`, ki bi kazala na primerek `MeritevPrebivalcev`.
 
 Najprej dodajmo razred `MeritevPrebivalcev` in nove lastnosti, povezane z njim. Atribut `leto` določimo kot `xsd:gYear`, saj gre za letnico, medtem ko `vrednost` ostane `xsd:integer`.
@@ -727,6 +733,8 @@ shema:vrednost a owl:DatatypeProperty ;
 
 Posledično lahko obstoječo podatkovno lastnost `steviloPrebivalcev` nadomestimo z novo objektno lastnostjo `imaMeritevPrebivalcev`, ki bo kazala na primerek `MeritevPrebivalcev`.
 
+> V nadaljevanju `shema:steviloPrebivalcev` ne uporabljamo več neposredno kot lastnost razreda `Obcina`, ampak vrednost hranimo prek meritev; lastnost lahko zato odstranimo.
+
 ```turtle
 shema:imaMeritevPrebivalcev a owl:ObjectProperty ;
                              rdfs:domain shema:Obcina ;
@@ -737,6 +745,35 @@ shema:imaMeritevPrebivalcev a owl:ObjectProperty ;
 <p align="center">
   <img src="./assets/img/Protege_object_properties_SURS.png" alt="Objektna lastnost podatkov SURS v Protégé" width="800px" />
 </p>
+
+#### 4.8 Preoblikovanje podatkov z novo strukturo
+
+Podatke (tj. primerki) o številu prebivalcev iz SURSA bomo sedaj preoblikovali tako, da namesto neposredne vrednosti `steviloPrebivalcev` vsebujejo povezavo na primerek `MeritevPrebivalcev`, ki ima lastnosti `leto` in `vrednost`. To nam omogoča, da imamo več meritev za različna leta, ne da bi morali spreminjati strukturo razreda `Obcina`.
+
+Za občino `Ajdovščina` to izgleda takole:
+
+```turtle
+obcina:ajdovscina a shema:Obcina ;
+    shema:idObcinaSurs "001" ;
+    shema:naziv "Ajdovščina" ;
+    shema:imaMeritevPrebivalcev obcina:ajdovscina-stevilo-prebivalcev-2024, obcina:ajdovscina-stevilo-prebivalcev-2025 .
+
+obcina:ajdovscina-stevilo-prebivalcev-2024 a shema:MeritevPrebivalcev ;
+    shema:leto "2024"^^xsd:gYear ;
+    shema:vrednost 19891 .
+
+obcina:ajdovscina-stevilo-prebivalcev-2025 a shema:MeritevPrebivalcev ;
+    shema:leto "2025"^^xsd:gYear ;
+    shema:vrednost 19895 .
+```
+
+Celotna datoteka z nadgrajenim modelom in preoblikovanimi podatki je na voljo v [`SURS_obcine_dp_op.ttl`](./assets/data/processed/SURS_obcine_dp_op.ttl).
+
+#### 4.9 Primer zrelega modela
+
+Model podatkov o številu prebivalcev občin iz SURS-a je sedaj precej bolj zrel, si pa bomo ogledali še primer podatkov iz CRP-a, ki je bolj kompleksen in vsebuje več različnih entitet in lastnosti, da vidimo, kako se vse to povezuje v celoto.
+
+Model je na voljo v datoteki [`CRP.ttl`](./assets/data/processed/CRP.ttl).
 
 </details>
 
