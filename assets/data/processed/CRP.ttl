@@ -13,6 +13,7 @@
 @prefix odrl: <http://www.w3.org/ns/odrl/2/> .
 @prefix dcat: <http://www.w3.org/ns/dcat#> .
 @prefix dqv: <http://www.w3.org/ns/dqv#> .
+@prefix wd: <https://www.wikidata.org/wiki/> .
 @base <https://pzsi.sigov.si/datamodel/ns/crp#> .
 
 <https://pzsi.sigov.si/datamodel/ns/crp> rdf:type owl:Ontology ;
@@ -387,7 +388,8 @@ dcterms:issued rdf:type owl:DatatypeProperty .
 
 
 ###  http://xmlns.com/foaf/0.1/Name
-foaf:Name rdf:type owl:DatatypeProperty .
+foaf:givenName rdf:type owl:DatatypeProperty .
+foaf:name rdf:type owl:DatatypeProperty .
 
 
 ###  http://xmlns.com/foaf/0.1/familyName
@@ -621,7 +623,7 @@ foaf:familyName rdf:type owl:DatatypeProperty .
 
 ###  https://pzsi.sigov.si/datamodel/ns/crp#ime
 :ime rdf:type owl:DatatypeProperty ;
-     rdfs:subPropertyOf foaf:Name ;
+     rdfs:subPropertyOf foaf:givenName ;
      rdfs:domain cnb:FizicnaOseba ;
      rdfs:range [ rdf:type rdfs:Datatype ;
                   owl:onDatatype xsd:string ;
@@ -3913,7 +3915,7 @@ foaf:Person rdf:type owl:Class .
                      :Drzava ;
             :identifikator 705 ;
             :vrednost "Slovenija"@sl ;
-            owl:sameAs <https://www.wikidata.org/wiki/Q215> .
+            owl:sameAs wd:Q215 .
 
 
 ###  https://pzsi.sigov.si/datamodel/ns/crp#Drzava_706
@@ -4382,7 +4384,8 @@ foaf:Person rdf:type owl:Class .
 :Obcina_1 rdf:type owl:NamedIndividual ,
                    :Obcina ;
           :identifikator 1 ;
-          :vrednost "Ajdovščina"@sl .
+          :vrednost "Ajdovščina"@sl ;
+          owl:sameAs wd:Q331701 .
 
 
 ###  https://pzsi.sigov.si/datamodel/ns/crp#Obcina_10

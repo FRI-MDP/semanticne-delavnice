@@ -769,20 +769,279 @@ obcina:ajdovscina-stevilo-prebivalcev-2025 a shema:MeritevPrebivalcev ;
 
 Celotna datoteka z nadgrajenim modelom in preoblikovanimi podatki je na voljo v [`SURS_obcine_dp_op.ttl`](./assets/data/processed/SURS_obcine_dp_op.ttl).
 
-#### 4.9 Primer zrelega modela
-
-Model podatkov o številu prebivalcev občin iz SURS-a je sedaj precej bolj zrel, si pa bomo ogledali še primer podatkov iz CRP-a, ki je bolj kompleksen in vsebuje več različnih entitet in lastnosti, da vidimo, kako se vse to povezuje v celoto.
-
-Model je na voljo v datoteki [`CRP.ttl`](./assets/data/processed/CRP.ttl).
-
 </details>
 
 ### 5. Raven 5 ★: povezani podatki in zunanji viri
+
+<details>
+<summary>Prikaži podrobnosti</summary>
+
+#### 5.1 Kaj pomeni raven 5 ★ v praksi?
+
+Na ravni 4 ★ smo podatke zapisali v RDF, dodali enolične URI-je, formalizirali model z ontologijo (formalni model TBox in strukturirane primerke ABox) in dosegli strojno razumljivost. Vendar so naši podatki še vedno **izolirani** - niso povezani z drugimi viri, ne uporabljajo skupnih pojmov ali standardov, in niso del širšega ekosistema podatkov.
+
+Raven 5 ★ dosežemo šele, ko naše podatke **povežemo z drugimi viri** in **uporabimo skupne pojme** iz obstoječih ontologij, s čimer postanejo del globalnega spletnega ekosistema podatkov.
+
+Ključna razlika je:
+
+> 4 ★ = podatki so **semantično opisani**  
+> 5 ★ = podatki so semantično opisani in **povezani z drugimi podatki**
+
+#### 5.2 Zunanji viri za povezovanje
+
+- **Repozitorij podatkovnih modelov** (npr. Centralni besednjak) na Platformi za semantično interoperabilnost.
+- **Splošne terminološke (TBox) ontologije** (npr. [Schema.org](https://schema.org/), [FOAF](http://xmlns.com/foaf/spec/), [Dublin Core](http://purl.org/dc/elements/1.1/)), [SKOS](http://www.w3.org/2004/02/skos/core#), [DCAT](http://www.w3.org/ns/dcat#) idr.
+- **Splošne podatkovne (ABox) ontologije** (npr. [DBpedia](https://wiki.dbpedia.org/), [Wikidata](https://www.wikidata.org/), [LinkedGeoData](http://linkedgeodata.org/)) idr.
+- **Domenski besednjaki** (npr. [EUROVOC](https://eurovoc.europa.eu/), [GEMET](https://www.eionet.europa.eu/gemet/)), [INSPIRE](https://inspire.ec.europa.eu/glossary), [GeoNames](https://www.geonames.org/) idr.
+
+> Povezovanje z zunanjimi viri ne pomeni, da bomo vse podatke fizično uvozili v lastno podatkovno zbirko. Ključna ideja povezanih podatkov je, da **ohranimo podatke pri izvoru**, mi pa zagotovimo **enolične povezave**, prek katerih lahko po potrebi dostopamo po dodatnih informacijah.
+
+V nadaljevanju se ne bomo osredotočili na množično povezovanje z zunanjimi viri, ampak bomo najprej pogledali **povezovanje znotraj javnega sektorja**, in sicer na primeru [`CRP.ttl`](./assets/data/processed/CRP.ttl), ki predstavlja referenčne, produkcijsko usmerjen model. Na njem bomo pokazali osnovne semantične mehanizme povezovanja, ki so uporabni pri povezovanju z zunanjimi viri.
+
+#### 5.3 Povezovanje s hierarhijo pojmov (`rdfs:subClassOf`)
+
+V ontologiji CRP so pojmi organizirani v **hierarhijo razredov**, kar omogoča ponovno uporabo lastnosti in bolj splošne poizvedbe. V zvihku `Entities` &rarr; `Classes` lahko opazimo hierarhijo (glej spodnjo sliko), kjer so razredi organizirani z uporabo lastnosti `rdfs:subClassOf`, kar pomeni, da je en razred podrazred drugega.
+
+- `cnbs:Sifrant`
+  - `:SifrantIO`
+    - `:Obcina`
+
+<p align="center">
+  <img src="./assets/img/Protege_subclasses_CRP.png" alt="Razredna hierarhija podatkov CRP v Protégé" width="800px" />
+</p>
+
+Zapis hierarhije v RDF/TTL je naslednji:
+
+```turtle
+@prefix : <https://pzsi.sigov.si/datamodel/ns/crp#> .
+@prefix cnbs: <http://onto.mju.gov.si/centralni-besednjak-sifranti#> .
+
+cnbs:Sifrant rdf:type owl:Class .
+
+:SifrantIO rdf:type owl:Class ;
+           rdfs:subClassOf cnbs:Sifrant .
+
+:Obcina rdf:type owl:Class ;
+        rdfs:subClassOf :SifrantIO .
+```
+
+S tem formalno opredelimo, da je vsaka `Obcina` tudi `SifrantIO` in vsak `SifrantIO` tudi `cnbs:Sifrant`.
+
+Pri tem smo načrtno uporabili pojme iz **Centralnega besednjaka** (npr. `cnbs:Sifrant`), ki je del Platforme za semantično interoperabilnost, da pokažemo, kako lahko uporabimo skupne pojme za povezovanje z zunanjimi viri. S tem smo dosegli, da so naši podatki o občinah del širšega ekosistema podatkov, ki uporablja skupne standarde in pojme.
+
+> To predstavlja temelj za sklepanje: če poizvedujemo po vseh `cnbs:Sifrant`, bomo samodejno dobili tudi `:Obcina`, če seveda uporabljamo mehanizme sklepanja, ki upoštevajo hierarhijo razredov.
+
+#### 5.4 Povezovanje s hierarhijo lastnosti (`rdfs:subPropertyOf`)
+
+Podoben koncept kot pri razredih velja tudi za lastnosti. V CRP-ju se pogosto pojavi situacija, kjer imamo splošno lastnost (npr. identifikator) in nato bolj specifične lastnosti, ki so podlastnosti te splošne lastnosti (npr. identifikator v določenem registru).
+
+V zavihku `Entities` &rarr; `Data properties` lahko opazimo hierarhijo lastnosti (glej spodnjo sliko), kjer so določene lastnosti označene kot `rdfs:subPropertyOf` drugih lastnosti.
+
+- [`foaf:givenName`](https://xmlns.com/foaf/spec/#term_givenName)
+  - `:ime`
+    - `:mat_ime_1`
+
+<p align="center">
+  <img src="./assets/img/Protege_subproperties_CRP.png" alt="Hierarhija lastnosti podatkov CRP v Protégé" width="800px" />
+</p>
+
+Zapis hierarhije v RDF/TTL je naslednji:
+
+```turtle
+@prefix : <https://pzsi.sigov.si/datamodel/ns/crp#> .
+@prefix cnb: <http://onto.mju.gov.si/centralni-besednjak-core#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+:ime rdf:type owl:DatatypeProperty ;
+     rdfs:subPropertyOf foaf:givenName ;
+     rdfs:domain cnb:FizicnaOseba ;
+     rdfs:range [ rdf:type rdfs:Datatype ;
+                  owl:onDatatype xsd:string ;
+                  owl:withRestrictions ( [ xsd:maxLength "35"^^xsd:nonNegativeInteger
+                                         ]
+                                       )
+                ] ;
+     rdfs:label "ime"@sl .
+
+:mat_ime_1 rdf:type owl:DatatypeProperty ;
+           rdfs:subPropertyOf :ime ;
+           rdfs:label "prvo ime matere"@sl .
+```
+
+S tem formalno opredelimo, da je `:mat_ime_1` podlastnost `:ime`, ki je podlastnost `foaf:givenName`. To pomeni, da če imamo trditev, da ima neka oseba `:mat_ime_1` vrednost "Marija", lahko sklepamo, da ima ta oseba tudi `:ime` "Marija" in `foaf:givenName` "Marija", če uporabljamo mehanizme sklepanja, ki upoštevajo hierarhijo lastnosti. Prav tako se deduje tudi vse omejitve, npr. dolžina 35 znakov, ki je opredeljena na `:ime`, velja tudi za `:mat_ime_1`.
+
+#### 5.5 Povezovanje istih primerkov (`owl:sameAs`)
+
+V nekaterih primerih vemo, da dva URI-ja predstavljata **popolnoma isto entiteto**, le v različnih podatkovnih virih.
+
+V našem primeru občina Ajdovščina v viru CRP (`:Obcina_1`) predstavlja isto občino, ki je opredeljena tudi na Wikidata (`wd:Q331701`).
+
+<p align="center">
+  <img src="./assets/img/Protege_sameAs_CRP.png" alt="Isti primerki podatkov CRP v Protégé" width="800px" />
+</p>
+
+Zapis hierarhije v RDF/TTL je naslednji:
+
+```turtle
+@prefix : <https://pzsi.sigov.si/datamodel/ns/crp#> .
+@prefix wd: <https://www.wikidata.org/entity/> .
+
+:Obcina_1 rdf:type owl:NamedIndividual ,
+                   :Obcina ;
+          :identifikator 1 ;
+          :vrednost "Ajdovščina"@sl ;
+          owl:sameAs wd:Q331701 .
+```
+
+Semantični pomen tega zapisa je močan, in sicer: vse, kar velja za `:wd:Q331701` (npr. da je to občina, da ima določene lastnosti, da je del Slovenije), velja tudi za `:Obcina_1`, in obratno. To nam omogoča, da združimo informacije iz različnih virov, ne da bi morali fizično združiti podatke, ampak preprosto zagotovimo povezavo med njimi.
+
+#### 5.6 Povezovanje pojmov (`owl:equivalentClass`)
+
+V predhodnjih korakih smo povezovali **primerke** (`owl:sameAs`) in gradili **hierarhije** razredov (`rdfs:subClassOf`) oz. lastnosti (`rdfs:subPropertyOf`). Pogosto pa želimo povezati tudi **pojme** oz. razrede, npr. v našem primeru pojem **občine** pomeni isto kot pojem **municipality** v nekem drugem slovarju ali ontologiji. Za to lahko uporabimo gradnik `owl:equivalentClass`.
+
+V CRP-ju je razred `:Obcina` zapisan kot definiran razred, in sicer z natančnim opisom, kaj vse ga opredeljuje. To je razvidno v naslednjem zapisu in pogledu v orodju Protégé, in sicer v dveh delih:
+
+- Zaprt nabor primerkov z `owl:equivalentClass` in `owl:oneOf`, kjer so navedeni vsi primerki, ki spadajo v razred `:Obcina` (npr. `:Obcina_1`, `:Obcina_10`, `:Obcina_100` itd.).
+- Omejitev pri dedovanju z `rdfs:subClassOf`, kjer ima `:identifikator` omejitev vrednosti med 1 in 999, `:vrednost` pa omejitev dolžine do 35 znakov.
+
+```turtle
+:Obcina rdf:type owl:Class ;
+        owl:equivalentClass [ rdf:type owl:Class ;
+                              owl:oneOf ( :Obcina_1
+                                          :Obcina_10
+                                          :Obcina_100
+                                          ...
+                                        )
+                            ] ;
+        rdfs:subClassOf :SifrantIO ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty :identifikator ;
+                          owl:allValuesFrom [ rdf:type rdfs:Datatype ;
+                                              owl:onDatatype xsd:int ;
+                                              owl:withRestrictions ( [ xsd:minInclusive 1
+                                                                     ]
+                                                                     [ xsd:maxInclusive 999
+                                                                     ]
+                                                                   )
+                                            ]
+                        ] ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty :vrednost ;
+                          owl:allValuesFrom [ rdf:type rdfs:Datatype ;
+                                              owl:onDatatype xsd:string ;
+                                              owl:withRestrictions ( [ xsd:maxLength "35"^^xsd:nonNegativeInteger
+                                                                     ]
+                                                                   )
+                                            ]
+                        ] ;
+        rdfs:label "Občina"@sl .
+```
+
+<p align="center">
+  <img src="./assets/img/Protege_omejitev_razreda_CRP.png" alt="Omejitev razreda podatkov CRP v Protégé" width="800px" />
+</p>
+
+Takšen pristop je uporaben za **šifrante**, kjer želimo izrecno opredeliti, da gre za končen seznam.
+
+#### 5.7 Povezovanje CRP in SURS podatkov
+
+Sedaj si poglejmo konkreten primer povezovanja podatkov dveh virov:
+
+- Centralnega registra prebivalcev (**CRP**) in
+- Statističnega urada RS (**SURS**).
+
+Cilj ni združevanje podatkov v eno datoteko, temveč omogočiti, da podatki iz različnih virov **opisujejo iste entitete** in jih lahko **skupaj uporabljamo v poizvedbah in sklepanju**. S tem namenom bomo integracijo opredelili v novi datoteki [`Integracija_CRP_SURS.ttl`](./assets/data/processed/Integracija_CRP_SURS.ttl), kjer bomo vzpostavili povezave med pojmi in primerki iz obeh virov.
+
+CRP in SURS obravnavata **iste občine**, vendar z različnim namenom: v CRP-ju so uradni šifranti in stabilni identifikatorji, ne vsebuje pa statističnih kazalnikov (npr. števila prebivalcev), ki pa so prisotni v SURS-u.
+
+Najbolj neposreden način povezovanja je na ravni **primerkov občin**, kjer lahko uporabimo `owl:sameAs`.
+
+V CRP imamo npr.
+
+```turtle
+@prefix : <https://pzsi.sigov.si/datamodel/ns/crp#> .
+
+:Obcina_1 rdf:type owl:NamedIndividual ,
+                   :Obcina ;
+          :identifikator 1 ;
+          :vrednost "Ajdovščina"@sl .
+```
+
+V SURS-u pa imamo npr.
+
+```turtle
+@prefix shema: <https://onto.mdp.gov.si/shema/> .
+@prefix obcina: <https://onto.mdp.gov.si/obcina/> .
+
+obcina:ajdovscina a shema:Obcina ;
+    shema:idObcinaSurs "001" ;
+    shema:naziv "Ajdovščina" .
+```
+
+Ker vemo, da oba primerka predstavljata **isto realno občino**, ju lahko povežemo:
+
+```turtle
+@prefix crp: <https://pzsi.sigov.si/datamodel/ns/crp#> .
+@prefix sursABox: <https://onto.mdp.gov.si/obcina/> .
+
+crp:Obcina_1 owl:sameAs sursABox:ajdovscina .
+```
+
+> Zaradi lažjega razumevanje in interpretacijo uporabimo predponi `crp` in `surs` za URI-je iz obeh virov.
+
+S tem povemo, da gre za isto entiteto, lastnosti iz obeh virov veljajo za isto občino, poizvedbe lahko "prehajajo" med viroma. Ključno je, da **podatkov ne podvajamo**, ampak jih **logično združimo**.
+
+Poleg primerkov lahko povežemo tudi **pojme**. Npr. v CRP-ju imamo razred:
+
+```turtle
+@prefix : <https://pzsi.sigov.si/datamodel/ns/crp#> .
+
+:Obcina rdf:type owl:Class .
+```
+
+V SURS modelu pa:
+
+```turtle
+@prefix shema: <https://onto.mdp.gov.si/shema/> .
+@prefix obcina: <https://onto.mdp.gov.si/obcina/> .
+
+obcina:ajdovscina a shema:Obcina .
+```
+
+Če se odločimo, da oba pojma pomenita isto stvar (tj. občino), lahko uporabimo `owl:equivalentClass`. Posledica tega bi bila, da bi vsi primerki `:Obcina` v CRP-ju postali tudi `shema:Obcina` in obratno, kar omogoča skupno interpretacijo in uporabo lastnosti, ki so opredeljene na obeh straneh. Če pa želimo biti bolj previdni (npr. ker SURS model vključuje tudi zgodovinske oz. agregirane enote), lahko uporabimo šibkejšo povezavo `rdfs:subClassOf`.
+
+```turtle
+@prefix crp: <https://pzsi.sigov.si/datamodel/ns/crp#> .
+@prefix sursTBox: <https://onto.mdp.gov.si/shema/> .
+
+sursTBox:Obcina rdfs:subClassOf crp:Obcina .
+```
+
+V okviru integracije za občino Ajdovščina že imamo povezavo na Wikidata (`owl:sameAs wd:Q331701`), kar pomeni, da je ta občina del širšega ekosistema podatkov, ki vključuje tudi SURS in CRP, saj so ti povezani z Wikidata. Dodajmo še omenjene povezave za nekaj drugih občin.
+
+```turtle
+@prefix crp: <https://pzsi.sigov.si/datamodel/ns/crp#> .
+@prefix sursTBox: <https://onto.mdp.gov.si/shema/> .
+@prefix sursABox: <https://onto.mdp.gov.si/obcina/> .
+@prefix wd: <https://www.wikidata.org/entity/> .
+
+sursTBox:Obcina rdfs:subClassOf crp:Obcina .
+
+crp:Obcina_1 owl:sameAs sursABox:ajdovscina .
+crp:Obcina_11 owl:sameAs sursABox:celje .
+crp:Obcina_61 owl:sameAs sursABox:ljubljana .
+crp:Obcina_70 owl:sameAs sursABox:maribor .
+
+crp:Obcina_1 owl:sameAs wd:Q331701 .
+crp:Obcina_11 owl:sameAs wd:Q3441823 .
+crp:Obcina_61 owl:sameAs wd:Q3434113 .
+crp:Obcina_70 owl:sameAs wd:Q3435104 .
+```
+
+</details>
 
 ### 6. Uporaba semantično opisanih podatkov s SPARQL
 
 ### 7. Sklepanje: prehod od podatkov k znanju
 
 ### 8. Vizualizacija in integracija v aplikacije
-
-### 9. Povzetek in nadaljnji koraki
