@@ -52,6 +52,10 @@ Naročilo sofinancirata Republika Slovenija in Evropska unija iz Načrta za okre
 
 ### 1. Uvod: Zakaj semantično opisovanje podatkov?
 
+<p align="left">
+  <img src="./assets/img/logo_1.png" alt="1. poglavje" width="200px" />
+</p>
+
 <details>
 <summary>Prikaži podrobnosti</summary>
 
@@ -189,6 +193,10 @@ Poznamo pa še številne druge formalne opredelitve v obliki besednjakov in onto
 
 ### 2. Od izvornih podatkov (1 ★) do odprtih podatkov (3 ★)
 
+<p align="left">
+  <img src="./assets/img/logo_2.png" alt="2. poglavje" width="200px" />
+</p>
+
 <details>
 <summary>Prikaži podrobnosti</summary>
 
@@ -325,6 +333,10 @@ Npr. `Ajdovščina` ima v CRP `OBC_ID=1`, v SURS pa `ob_id=001`. Človeški upor
 </details>
 
 ### 3. Raven 4 ★: semantični opis podatkov z RDF
+
+<p align="left">
+  <img src="./assets/img/logo_3.png" alt="3. poglavje" width="200px" />
+</p>
 
 <details>
 <summary>Prikaži podrobnosti</summary>
@@ -503,6 +515,10 @@ Ko naši podatki dosežejo raven 4 ★, dosežemo stanje, kjer podatki postanejo
 </details>
 
 ### 4. Formalizacija podatkovnega modela z ontologijami
+
+<p align="left">
+  <img src="./assets/img/logo_4.png" alt="4. poglavje" width="200px" />
+</p>
 
 <details>
 <summary>Prikaži podrobnosti</summary>
@@ -772,6 +788,10 @@ Celotna datoteka z nadgrajenim modelom in preoblikovanimi podatki je na voljo v 
 </details>
 
 ### 5. Raven 5 ★: povezani podatki in zunanji viri
+
+<p align="left">
+  <img src="./assets/img/logo_5.png" alt="5. poglavje" width="200px" />
+</p>
 
 <details>
 <summary>Prikaži podrobnosti</summary>
