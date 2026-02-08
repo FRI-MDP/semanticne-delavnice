@@ -1,5 +1,6 @@
 <p align="center">
-  <img src="./assets/img/logo.png" alt="Delavnice semantičnega opisovanja podatkov" width="200px" />
+  <img src="./assets/img/logo.png" alt="Delavnice semantičnega opisovanja podatkov" width="200px" /><br><br>
+   <a href="./assets/predstavitev.pdf"><img src="./assets/img/prenesi_pdf.png" alt="Delavnice semantičnega opisovanja podatkov" width="150px" /></a>
 </p>
 
 # Delavnice semantičnega opisovanja podatkov
