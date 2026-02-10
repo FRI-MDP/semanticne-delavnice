@@ -1065,4 +1065,136 @@ crp:Obcina_70 owl:sameAs wd:Q3435104 .
 
 ### 7. Sklepanje: prehod od podatkov k znanju
 
-### 8. Vizualizacija in integracija v aplikacije
+### 8. Vizualizacija
+
+<p align="left">
+  <img src="./assets/img/logo_8.png" alt="8. poglavje" width="200px" />
+</p>
+
+<details><summary>Prikaži podrobnosti</summary>
+
+#### 8.1 Zakaj je vizualizacija pomembna?
+
+Čeprav so semantično in tehnično bogati podatki ključni za interoperabilnost, morajo biti hkrati **dostopni** in **razumljivi tudi uporabnikom**, ki niso tehnično podkovani.. Zato je priporočljivo, da ob strojno berljivih oblikah (RDF, API) ponudimo tudi dopolnilne predstavitve, kot so **vizualizacije**, **interaktivne tabele** ali **povzetki v naravnem jeziku**.
+
+V nadaljevanju si bomo ogledali:
+
+- praktične možnosti vizualizacije v orodju **Protégé**,
+- primer prototipa uporabniškega vmesnika **Podatkovnega zemljevida** (na odprtih podatkih OPSI),
+- kako vizualizacija podpira razumevanje **globalne sheme**, **sheme posameznih virov** in **konkretnih podatkov**.
+
+#### 8.2 Razširitve orodja Protégé za vizualizacijo
+
+Protégé ima več uporabnih razširitev, ki pomagajo pri razumevanju ontologije in odnosov med pojmi:
+
+- **OntoGraph** (glej sliko),
+- OWLViz,
+- ProtégéVOWL,
+- SOVA.
+
+<p align="center"><img src="./assets/img/OntoGraf.png" alt="OntoGraph v Protégé" width="800px" /> </p>
+
+**Praktični namen**: hitro vizualno preverjanje, ali smo pojme in relacije modelirali smiselno (npr. ali so razredi pravilno povezani, ali so relacije ustrezne, ipd.).
+
+#### 8.3 Uporabniški vmesnik Podatkovnega zemljevida
+
+Kot primer vizualizacije in raziskovanja podatkov si ogledamo prototip pregledovalnika, ki je nastal v okviru projekta **Podatkovni zemljevid** v sodelovanju z Ministrstvom za digitalno preobrazbo (MDP).
+
+Prototip ponuja naslednje **osrednje funkcionalnosti**:
+
+- pregled **globalne sheme** Podatkovnega zemljevida,
+- pregled **sheme** posameznega/izbranih **vira**/ov,
+- predogled **podatkov** posameznega/izbranih **vira**/ov,
+
+ter podporne funkcionalnosti:
+
+- **večjezičnost** (sl, en),
+- **iskanje** (koncepti, povezave, metapodatki),
+- **skrivanje konceptov** (za fokusiran pregled),
+- **fokusiranje** na izbran koncept in prikaz konteksta.
+
+#### 8.4 Demonstracija Podatkovnega zemljevida: od globalne sheme do podatkov
+
+V nadaljevanju si oglejmo prototip uporabniškega vmesnika Podatkovnega zemljevida. Najprej začnemo na globalnem pogledu, kjer so izpostavljeni ključni koncepti (npr. Katalog, Nabor podatkov, Distribucija, Shema) in njihove povezave.
+
+<p align="center">
+  <img src="./assets/img/PZ_globalna_shema_1.png" alt="Pregled globalne sheme (osnovni pogled)" width="800px" />
+</p>
+
+Ko se z miško premaknemo nad izbran koncept, se pogled osredotoči na njegov **kontekst sosednosti**: prikazani so le odvisni koncepti in povezave med njimi, dodatno pa se pokažejo nazivi relacij.
+
+<p align="center">
+  <img src="./assets/img/PZ_globalna_shema_2.png" alt="Pregled globalne sheme (hover fokus)" width="800px" />
+</p>
+
+Klik na koncept odpre **podrobnosti**: URI, definicije (npr. `skos:definition`) ter rangirane lastnosti in najpomembnejše metapodatke. V praksi je to zelo uporaben način, da si hitro razložimo “kaj je kaj” brez brskanja po TTL/ontologiji.
+
+<p align="center">
+  <img src="./assets/img/PZ_globalna_shema_3.png" alt="Pregled globalne sheme (podrobnosti koncepta)" width="800px" />
+</p>
+
+Vmesnik omogoča tudi razširitev prikaza, kjer po potrebi prikažemo **vse** lastnosti/metapodatke, ne le najpomembnejših.
+
+<p align="center">
+  <img src="./assets/img/PZ_globalna_shema_4.png" alt="Pregled globalne sheme (razširjen prikaz lastnosti)" width="800px" />
+</p>
+
+Dodatne funkcionalnosti so dostopne prek **desnega klika** na koncept (npr. fokus, skrij, podrobnosti, razišči podatke). To je priročno pri velikih shemah, kjer brez “fokusa” hitro izgubimo pregled.
+
+<p align="center">
+  <img src="./assets/img/PZ_globalna_shema_5.png" alt="Pregled globalne sheme (kontekstni meni)" width="800px" />
+</p>
+
+Pomembna prednost prototipa je tudi **večjezičnost**: tako uporabniški vmesnik kot metapodatki (nazivi pojmov in lastnosti) so lahko prikazani v različnih jezikih.
+
+<p align="center">
+  <img src="./assets/img/PZ_globalna_shema_7.png" alt="Pregled globalne sheme (večjezičnost - nadaljevanje)" width="800px" />
+</p>
+
+Naslednji korak demonstracije je prehod iz globalne sheme na **shemo posameznega vira**. Za izbran nabor podatkov so na voljo povezani gradniki (npr. distribucije in shema), pri čemer shema vsebuje pripadajoče metapodatke (atributi, zaloge vrednosti, omejitve).
+
+<p align="center">
+  <img src="./assets/img/PZ_shema_vira_3.png" alt="Pregled sheme posameznega vira (3/5)" width="800px" />
+</p>
+
+<p align="center">
+  <img src="./assets/img/PZ_shema_vira_4.png" alt="Pregled sheme posameznega vira (4/5)" width="800px" />
+</p>
+
+<p align="center">
+  <img src="./assets/img/PZ_shema_vira_5.png" alt="Pregled sheme posameznega vira (5/5)" width="800px" />
+</p>
+
+Za zaključek demonstracije si oglejmo še primer pregleda **sheme in podatkov iz več izbranih virov**. Ta pogled je še posebej uporaben, ko želimo preveriti, kako se določeni pojmi ali vrednosti pojavljajo v različnih zbirkah.
+
+<p align="center">
+  <img src="./assets/img/PZ_sheme_in_podatki_1.png" alt="Pregled sheme in podatkov izbranih virov (1/6)" width="800px" />
+</p>
+
+Po podatkih lahko **iščemo**: vnesemo iskalni niz in sistem izpostavi zadetke. V demonstraciji uporabimo primer niza **Primorje**.
+
+<p align="center">
+  <img src="./assets/img/PZ_sheme_in_podatki_3.png" alt="Zadetki iskanja (3/6)" width="800px" />
+</p>
+
+Ko odpremo podrobnosti zadetka, lahko razumemo, *kje* se niz pojavlja (npr. v atributu **dolžnik**) in kakšen je pomen tega atributa v shemi.
+
+<p align="center">
+  <img src="./assets/img/PZ_sheme_in_podatki_4.png" alt="Podrobnosti zadetka (4/6)" width="800px" />
+</p>
+
+Pomemben del je tudi raziskovanje **konteksta**: iz posamezne vrednosti se lahko premaknemo do distribucije in nabora podatkov, kateremu pripada, ter razumemo, v kakšni strukturi je bila vrednost zajeta.
+
+<p align="center">
+  <img src="./assets/img/PZ_sheme_in_podatki_5.png" alt="Raziskovanje konteksta (5/6)" width="800px" />
+</p>
+
+Na koncu demonstracije preverimo še, da so podatki vezani na **shemo** z jasno opredeljeno **verzijo** (npr. `v1.0.0`) ter z zahtevanimi metapodatki. To je ključno za sledljivost in stabilnost integracij, ko se sheme skozi čas nadgrajujejo.
+
+<p align="center">
+  <img src="./assets/img/PZ_sheme_in_podatki_6.png" alt="Shema, verzija in metapodatki (6/6)" width="800px" />
+</p>
+
+Prototip interaktivnega pregledovalnika Podatkovnega zemljevida je na voljo na [https://fri-mdp.github.io/**Podatkovni-zemljevid-2023**/**pz-viewer**/](https://fri-mdp.github.io/Podatkovni-zemljevid-2023/pz-viewer/)
+
+</details>
