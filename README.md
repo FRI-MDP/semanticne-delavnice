@@ -1063,7 +1063,581 @@ crp:Obcina_70 owl:sameAs wd:Q3435104 .
 
 ### 6. Uporaba semantično opisanih podatkov s SPARQL
 
+<p align="left">
+  <img src="./assets/img/logo_5.png" alt="5. poglavje" width="200px" />
+</p>
+
+<details>
+<summary>Prikaži podrobnosti</summary>
+
+#### 6.1 Poizvedovanje nad semantično opisanimi podatki - SPARQL
+Do sedaj smo spoznali osnovne koncepte za zapisovanje semantičnih podatkov. Podatki so sicer pomembni, vendar ena izmed ključnih lastnosti, ki jo potrebujemo za delo, je rokovanje s podatki - iskanje, dodajanje novih podatkov, posodabljanje obstoječih in brisanje.
+
+v tem razdelku bomo prikazali uporabo poizvedovalnega jezika in protokola **SPARQL** za delo s semantičnimi podatki. SPARQL je rekurzivna kratica za *SPARQL Protocol and RDF Query Language.* Poleg poizvedovalnega jezika definira tudi protokol s pravili za povezovanje odjemalskega programa na SPARQL vmesnik in izmenjavo podatkov preko HTTP.
+
+[SPARQL 1.0](https://www.w3.org/TR/rdf-sparql-query/) je bil kot uraden standard W3C objavljen v letu 2008, zadnja [verzija 1.1](https://www.w3.org/TR/sparql11-overview/) pa v letu 2013. Posodobljena verzija vsebuje tudi dodatne funkcionalnosti, kot je uporaba podpoizvedb, negacije, posodobitve grafa in iskanje preko poti lastnosti v grafih.
+
+<p align="center">
+  <img src="./assets/img/SPARQL/SPARQL-about.png" alt="Prikaz protokola SPARQL" width="800px" />
+</p>
+
+#### 6.2 Uporaba podatkov CRP za iskanje
+SPARQL bomo lažje razumeli, če si bomo podatke predstavljali **v obliki grafa**. *Trojčki*, ki smo jih do sedaj zapisovali v datotekak *TTL* namreč tvorijo strukturo grafa. Naslednji zapis
+
+```turtle
+###  https://pzsi.sigov.si/datamodel/ns/crp#obc
+:obc rdf:type owl:ObjectProperty ;
+     rdfs:domain cnb:FizicnaOseba ;
+     rdfs:range :Obcina .
+```
+
+si lahko v obliki grafa predstavljamo sledeče:
+
+<p align="center">
+  <img src="./assets/img/SPARQL/CRP_trojcek.png" alt="Prikaz 'trojčka' v CRP" width="500px" />
+</p>
+
+Če si predstavljamo še okolico teh konceptov, lahko ugotovimo, da bi graf izgledal nekako takole:
+
+<p align="center">
+  <img src="./assets/img/SPARQL/CRP_trojcek_sirse.png" alt="Prikaz 'trojčka' v CRP širše" width="600px" />
+</p>
+
+Okolje Protégé ponuja tudi možnost poizvedovanja s SPARQL. V Protégé odprimo datoteko [`CRP.ttl`](./assets/data/processed/CRP.ttl) ter aktivirajmo zavihek za poizvedovanje s SPARQL (*Window -> Tabs -> SPARQL Query*).
+
+Izvedimo naslednjo poizvedbo: 
+
+```SPARQL
+SELECT ?osebek ?povedek ?predmet
+
+WHERE { 
+    ?osebek ?povedek ?predmet . 
+}
+```
+
+Rezultat poizvedbe so vsi *trojčki*, ki se nahajajo v naši ontologiji.
+
+<p align="center">
+  <img src="./assets/img/SPARQL/Protege_SPARQL.png" alt="Prikaz pogleda za izvajanje poizvedb SPARQL v Protégé" width="600px" />
+</p>
+
+#### 6.3 Osnovno iskanje vsebine v CRP
+V naši poizvedbi termini, ki se začnejo z `?` predstavljajo spremenljivke. SPARQL poskuša najti vse podgrafe v našem grafu (t.j. podatkovni bazi) in izpiše vsa ujemanja podgrafa s celotnim grafom. 
+
+Tako lahko npr. poiščemo vse povezave, ki izhajajo iz objekta `crp:Obcina_32`:
+
+```SPARQL
+SELECT ?povedek ?predmet
+
+WHERE { 
+    <https://pzsi.sigov.si/datamodel/ns/crp#Obcina_32> ?povedek ?predmet . 
+}
+```
+
+Pri daljših poveizvedbah lahko nekatere naslovne prostore uporabljamo večkrat, zato si lahko pripravimo okrajšave tudi v primeru poizvedb:
+
+```SPARQL
+PREFIX crp: <https://pzsi.sigov.si/datamodel/ns/crp#>
+
+SELECT ?povedek ?predmet
+
+WHERE { 
+    crp:Obcina_32 ?povedek ?predmet . 
+}
+```
+
+Rezultat zgornjih poizvedb, ki predstavlja vse povezane povedke in predmete z objektom `crp:Obcina_32` so prikazani na naslednji sliki:
+
+<p align="center">
+  <img src="./assets/img/SPARQL/Protege_Rezultati.png" alt="Rezultati zgornje poizvedbe" width="600px" />
+</p>
+
+#### 6.4 Osnovni koncepti SPARQL 
+Za prikaz osnovnih konceptov SPARQL si bomo izposodili javen primer iz DBPedije.
+
+DBPedija je javna semantična baza, ki vsebuje znanje iz Wikipedije. Vsebino črpa predvsem iz okenc tipa *infobox* na wiki straneh. Kot primer vzemimo https://en.wikipedia.org/wiki/Audi. Vsebine iz strukturirane desne strani so zapisane tudi na DBPediji: https://dbpedia.org/page/Audi. Spletna stran na DBPediji je prikaz semantično opisanega vira za objekt *Audi*. Kot uporabniku nam je omogočeno, da podatke prikažemo tudi v drugačni obliki - na primer takšni, kot smo semantično objekte opisovali zgoraj, v formatu *Turtle*.
+
+<p align="center">
+  <img src="./assets/img/SPARQL/wiki-audi.png" alt="Prikaz wiki strani Audi" width="800px" />
+</p>
+
+Na DBPediji lahko razberemo grafovsko strukturo zapisov, ki v našem primeru izgleda približno sledeče:
+
+<p align="center">
+  <img src="./assets/img/SPARQL/audi-onto.png" alt="Prikaz DBPedia strani Audi" width="800px" />
+</p>
+
+Izluščili smo manjši del grafa znanja iz DBpedije. Na Wikipediji lahko preberemo, da je August Horch leta 1910 ustanovil avtomobilsko podjetje Audi. V grafu vidimo tri entitete oziroma primerke: August Horch, Audi in Nemčija. Vsak primerek je semantično opisan in določen z več lastnostmi. Te lastnosti določajo vrednosti ali povezave do drugih primerkov. Opazimo, da je podjetje Audi ustanovil August Horch, ki je tipa oseba (*dbo:Person*). Primerek Audi vsebuje ime "Audi AG", je tipa podjetje (dbo:Company), ustanovljeno je bilo leta 1910 in se nahaja v Nemčiji.
+
+Celoten graf je sestavljen iz trojčkov: osebek, povedek in predmet. Na primer: trojica dbr:August_Horch, dbp:name in vrednost »August Horch«. Druga trojica je dbr:Audi, dbo:founded_by in dbr:August_Horch. Na ta način lahko zgradimo poljuben graf.
+
+DBPedija nudi javno storitev za izvajanje poizvedb (angl. SPARQL endpoint), ki je dostopna na povezavi https://dbpedia.org/sparql in nam omogoča neposredno izvajanje poizvedb SPARQL.
+
+<p align="center">
+  <img src="./assets/img/SPARQL/dbpedia-sparql-endpoint.png" alt="Prikaz SPARQL vmesnika na strani DBPedia" width="800px" />
+</p>
+
+##### Poizvedbe SPARQL
+Kot smo ugotovili prej, SPARQL omogoča definiranje trojic, ki se morajo ujemati z vzorci trojic v grafu.
+
+Za pridobitev rezultatov moramo definirati spremenljivke, ki se vežejo na koncepte RDF. V nadaljnjih primerih bomo dodali tudi pogoje in preddefinirane vrednosti, da pridobimo točno želene rezultate.
+
+Najprej si oglejmo najpreprostejšo poizvedbo: `SELECT ?subject ?predicate ?object`. Ta poizvedba vrne vrednosti za definirane spremenljivke. V našem primeru vrne vse trojice v grafu znanja. Naš primer vsebuje 9 trojic, prikazane so 3.
+
+> Odvisno od implementacije SPARQL poizvedovalnega vmesnika se lahko zgodi, da tako enostavna poizvedba ne bo delovala in boste morali vnesi še stavek WHERE z navedenimi temi tremi spremenljivkami.
+
+Če poznate relacijske baze podatkov in jezik SQL, boste opazili podobna načela, ki se uporabljajo pri jeziku SPARQL.
+
+##### Ujemanje vzorcev
+Grafni vzorec SPARQL (angl., graph pattern) je trojica RDF, zapisana v serializaciji Turtle, ki lahko na mestu osebka, povedka ali predmeta vsebuje spremenljivke.
+
+Če želimo na primer poiskati vsa imena v naši podatkovni bazi, oblikujemo pogoj kot trojico, v kateri je osebek povezan s predmetom prek lastnosti `dbp:name`. Ker so vzorci zapisani v formatu Turtle, jih zaključimo s piko.
+
+V našem primeru izvlečka iz podatkovne baze rezultat vsebuje dve vrstici oziroma dve možni ujemanji grafa – to sta imeni *Augusta Horcha* in podjetja *Audi*. Rezultat lahko preverimo na spodnji sliki, kjer vidimo, da sta oba ujemajoča se objekta povezana s svojo vrednostjo imena preko lastnosti `dbp:name`.
+
+<p align="center">
+  <img src="./assets/img/SPARQL/sparql-name.png" alt="Naša shema za pridobitev imen" width="800px" />
+</p>
+
+##### Konjunkcija posameznih vzorcev
+Nadalje lahko grafne vzorce kombiniramo in tako oblikujemo bolj kompleksne poizvedbe. V tem primeru želimo poiskati imena in leta ustanovitve vseh podjetij v naši podatkovni bazi:
+
+```SPARQL
+?subject dbp:name ?name .
+?subject rdf:type dbo:Company .
+?subject dbo:foundingYear ?foundingYear .
+```
+
+V naši bazi imamo le eno podjetje, in sicer *Audi AG*.
+
+<p align="center">
+  <img src="./assets/img/SPARQL/sparql-vzorec.png" alt="SPARQL vzorec za osnovno poizvedbo" width="800px" />
+</p>
+
+V zgornjem vzorcu se spremenljivka `?subject` nanaša na isti osnovni objekt, pri čemer morajo biti vsi trije stavki konjunktivnega vzorca izpolnjeni. Zaradi tega bodo med rezultate vključeni vsi objekti, ki imajo hkrati lastnosti `dbp:name` in `dbo:foundingYear` ter so tipa `dbo:Company`.
+
+Poizvedbi bi lahko dodali še več stavkov in jo tako naredili še kompleksnejšo.
+
+##### Poizvedba SPARQL
+Sedaj oblikujmo svojo prvo poizvedbo SPARQL. Spodaj je celotna poizvedba SPARQL, ki vsebuje enake grafne vzorce kot smo jih predstavili predhodno.
+
+```SPARQL
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX dbp: <http://dbpedia.org/property/>
+PREFIX dbo: <http://dbpedia.org/ontology/>
+
+SELECT ?name ?foundingYear
+
+FROM <http://dbpedia.org/>
+
+WHERE {
+  ?subject dbp:name ?name .
+  ?subject rdf:type dbo:Company .
+  ?subject dbo:foundingYear ?foundingYear .
+}
+```
+
+Prvi del poizvedbe vsebuje predpone (angl., prefixes), s katerimi poizvedbo skrajšamo in naredimo bolj berljivo. Definirali smo okrajšave za tri imenske prostore (angl., namespaces), ki jih uporabljamo. Sintaksa za določanje predpon se začne s ključno besedo **PREFIX**, ki ji sledi naziv okrajšave in dvopičje. Vrednost polnega URI-ja vira zapišemo med levi in desni oglat oklepaj `<...>`. Nato lahkko v poizvedbi nameso zapisovanja celotnih URI-jev uporabljamo te okrajšave.
+
+Naslednji del je stavek **SELECT**, kjer določimo želen rezultat – torej spremenljivke, ki jih želimo pridobiti iz podatkovne baze in jih vrniti kot rezultat.
+
+V delu **FROM** določimo graf, iz katerega želimo pridobiti rezultate.
+
+V delu **WHERE** navedemo vse pogoje oziroma grafne vzorce, ki morajo veljati za vsak rezultat.
+
+##### ORDER BY, LIMIT
+Naš prikazan primer grafa znanja na sliki zgoraj je majhen podnabor precej večjega grafa znanja iz DBPedije. DBPedijina storitev SPARQL je javno dostopna in jo lahko vsak prosto uporablja. DBPedia je sicer eden največjih javno dostopnih grafov znanja in vsebuje približno 900 milijonov dejstev s podatki za okoli 400.000 organizacij.
+
+Izvedite zgornjo poizvedbo na naslednji storitvi https://dbpedia.org/sparql. Kakšne rezultate dobite? So pričakovani?
+
+Vrne se mnogo rezultatov. Naša poizvedba namreč išče vzorce, ki se ujemajo z grafom na desni strani. Ta graf predstavlja splošno podjetje, za katerega nas zanima ime in leto ustanovitve. Ker je v DBPediji približno 400.000 organizacij, se s poizvedbo ujema veliko podjetij – in vsa se tudi vrnejo med rezultate.
+
+Rezultate lahko poskusimo urediti in omejiti število ujemajočih se rezultatov, da lažje najdemo zapise za Audi. Poskusimo rezultate urediti po imenu podjetja in preverimo samo prvih 100 rezultatov. Poizvedbi zato dodami naslednji vrstici:
+
+```SPARQL
+ORDER BY ASC (?name)
+LIMIT 100
+```
+
+Ko pogledamo rezultate, vidimo, da imajo nekatera podjetja na začetku prazna imena ali pa je njihovo ime leksikografsko precej pred pričakovanim imenom Audi.
+
+##### OFFSET
+Če na primer preskočimo prvih 14800 rezultatov, se bo podjetje Audi AG pojavilo med naslednjimi 100 zadetki (stanje 11. februarja 2026). Upoštevajte, da je DBPedia živa podatkovna baza, zato se lahko ta odmik razlikuje, ko boste poizvedbo izvedli sami. Zgornji poizvedbi dodajte še naslednjo vrstico:
+
+```SPARQL
+OFFSET 14800
+```
+
+Opazimo lahko tudi, da so v DBPedii za Audi AG shranjena različna leta ustanovitve, pri čemer se prvo začne z letom 1909.
+
+##### FILTER
+Boljša možnost za pridobitev želenih rezultatov je uporaba filtriranja. V našem primeru poznamo točen primerek podjetja, ki ga iščemo - `dbr:Audi` (http://dbpedia.org/resource/Audi), zato lahko uporabimo omejitev **FILTER** in vrnemo vse rezultate, kjer je osebek tipa `dbr:Audi`. V poizvedbi med pogoji dodamo še naslednji pogoj (ostale omejitve lahko odstranimo):
+
+```SPARQL
+FILTER (?subject IN (dbr:Audi))
+```
+
+Druga možnost je, da namesto spremenljivke za osebek neposredno zapišemo grafne vzorce z `dbr:Audi`.
+
+##### FILTER REGEX
+V splošnem natančnih identifikatorjev (URI-jev) želenih objektov. Ti so pogosto namenjeni organizaciji podatkov v bazi in so lahko tudi prazni ali si jih je težko zapomniti. Zato lahko filtriramo tudi na podlagi regularnih izrazov. Zgornji filter zamenjamo s sledečim:
+
+```SPARQL
+FILTER REGEX (?name, "^audi", "i")
+```
+
+V tem primeru filtriramo rezultate po imenu z uporabo regularnega izraza. Izraz vrne vsa imena, ki se začnejo z "audi", ne glede na velikost črk. Zato lahko besedo *audi* zapišemo z malimi črkami. To omogoča zastavica za neobčutljivost na velikost črk (angl., insensitive flag) kot zadnji parameter funkcije FILTER. Seveda lahko uporabimo katerokoli drugo standardno sintakso regularnih izrazov.
+
+##### OPTIONAL
+Če preverite definicijo vira [Company](https://dbpedia.org/ontology/Company) v DBPediji, lahko ugotovite, da definira tudi lastnost z imenom `dbo:tradingName`. Dodajmo jo torej v našo poizvedbo, da za Audi pridobimo še to lastnost in preverimo rezultate. K pogoju dodamo naslednje:
+
+```SPARQL
+?subject dbo:tradingName ?tradingName .
+```
+
+Rezultat poizvedbe je prazen. Po dodatnem preverjanju lahko ugotovimo, da objekt `dbr:Audi` te lastnosti ne vsebuje. Ker v grafu znanja za ta primerek takšna lastnost ne obstaja, se vzorec ne more ujemati in zato se kot rezultat ne vrne nič.
+
+Za rešitev problema moramo uporabiti ključno besedo **OPTIONAL**. Če se pri poizvedbi obvezni del vzorca ujema, se rezultat vrne in se opcijski del doda k rezultatu, če obstaja. Če ne obstaja, je opcijski del prazen, vendar se ostali ujemajoči deli poizvedbe vseeno vrnejo. Zgornji pogoj tako spremenite sledeče:
+
+```SPARQL
+OPTIONAL {?subject dbo:tradingName ?tradingName .}
+```
+
+##### UNION
+Zdaj se vprašajmo, koliko avtomobilskih proizvajalcev je v Nemčiji.
+
+Ko preverimo vnos za Audi v DBPedijii (https://dbpedia.org/page/Audi), ugotovimo, da obstaja lastnost `dbr:industry`, ki opredeljuje avtomobilsko industrijo. Opazimo tudi lastnost `dbp:locationCountry`, ki določa državo. Zato definiramo vzorec, s katerim takšna podjetja izpišemo in prikažemo njihove oznake:
+
+```SPARQL
+?carCompany rdfs:label ?carCompanyName .
+?carCompany dbo:industry dbr:Automotive_industry .
+?carCompany dbp:locationCountry dbr:Germany . 
+```
+
+Takoj opazimo, da rezultat vsebuje ponavljajoče se odgovore – imena podjetij v različnih jezikih. Zato dodamo dodatno omejitev **FILTER**, ki izpis omeji le na imena podjetij v angleščini.
+
+```SPARQL
+FILTER (LANG(?carCompanyName)="en")
+```
+
+Tako kot rezultat dobimo 9 imen podjetij.
+
+Ker poizvedujemo po privzetem grafu DBPedije, lahko del **FROM** izpustimo in bo poizvedba na endpointu še vedno delovala ter vrnila enake rezultate.
+
+Vemo, da Nemčija ni edina država, ki proizvaja avtomobile, zato želimo izpisati avtomobilska podjetja, ki se nahajajo v Nemčiji ali v Sloveniji.
+
+SPARQL podpira logično disjunkcijo z uporabo ključne besede **UNION**. V tem primeru najprej definiramo splošni del grafnega vzorca, nato pa v oklepajih navedemo dve možni alternativi, povezani z **UNION**.
+
+```SPARQL
+{ ?carCompany dbp:locationCountry dbr:Germany . }
+    UNION
+{ ?carCompany dbp:locationCountry dbr:Slovenia . }
+```
+
+Poizvedba sedaj definira, da mora obstajati instanca, ki ima določeno oznako (`rdfs:label`), ima lastnost `dbo:industry` tipa `dbr:Automotive_industry` in ima lastnost lokacije (`dbp:locationCountry`), kjer je lokacija lahko bodisi Nemčija (`dbr:Germany`) bodisi Slovenija (`dbr:Slovenia`).
+
+Ko poizvedbo izvedemo, ugotovimo, da v Sloveniji obstaja le še eno dodatno avtomobilsko podjetje z angleškim imenom.
+
+Zdaj bodimo bolj splošni in poskusimo poiskati vsa avtomobilska podjetja ter njihove pripadajoče države.
+
+Prejšnjo poizvedbo zato preoblikujemo tako, da uvedemo dodatno spremenljivko za državo in njeno oznako, ki se vrne v rezultatu. Prav tako razširimo omejitev **FILTER**, da se obe oznaki izpišeta v angleščini:
+
+```SPARQL
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX dbp: <http://dbpedia.org/property/>
+PREFIX dbo: <http://dbpedia.org/ontology/>
+
+SELECT ?carCompanyName ?countryName
+
+WHERE {
+    ?carCompany rdfs:label ?carCompanyName .
+    ?carCompany dbo:industry dbr:Automotive_industry .
+    ?carCompany dbp:locationCountry ?country .
+    ?country rdfs:label ?countryName . 
+    FILTER (LANG(?carCompanyName)="en" AND
+            LANG(?countryName)="en")
+}
+```
+
+Rezultat vsebuje precejšnje število držav.
+
+##### Agregatne funkcije in grupiranje
+Zdaj pa ugotovimo, koliko avtomobilskih podjetij je v prejšnjem rezultatu.
+
+SPARQL podpira agregatne funkcije, ki jih lahko vključimo v del **SELECT** poizvedbe. **COUNT** je ena izmed agregatnih funkcij, ki prešteje, kolikokrat je določen izraz vezan (angl., bound). V našem primeru štejemo število imen avtomobilskih podjetij in stolpec v rezultatni tabeli poimenujemo kot **?carCompanyNameCount**:
+
+```SPARQL
+SELECT (COUNT(?carCompanyName) AS ?carCompanyNameCount)
+```
+
+Rezultat te poizvedbe vrne 318 avtomobilskih podjetij, ki se ujemajo z danim grafnim vzorcem v DBPedijii.
+
+Druge agregatne funkcije, ki jih lahko uporabimo, so na primer **SUM**, **AVG**, **MIN**, **MAX** ali **SAMPLE**.
+
+Ob podrobnejšem pregledu opazimo, da so nekatera podjetja očitno povezana z več državami, zato so v štetje vključena večkrat. Če želimo šteti samo različna imena podjetij, moramo uporabiti ključno besedo **DISTINCT**:
+
+```SPARQL
+SELECT (COUNT(DISTINCT ?carCompanyName) AS ?carCompanyNameCount)
+```
+
+Zdaj je vsako ime podjetja prešteto samo enkrat, rezultat pa pove, da je takih podjetij 310.
+
+Takšen rezultat pa nam še ne pove ničesar o številu avtomobilskih podjetij po državah. Da dobimo število avtomobilskih podjetij po državah, želimo rešitev razdeliti v skupine – tj. države – in znotraj teh skupin prešteti podjetja. To lahko dosežemo z določilom **GROUP BY**. V delu *GROUP BY* navedemo spremenljivke, po katerih se bodo rezultati grupirali. Nato lahko uporabimo agregatne funkcije, kot je **COUNT**, za izračune znotraj posamezne skupine. V našem primeru smo rezultate dodatno uredili padajoče glede na število avtomobilskih podjetij v državi. Na koncu zgornje poizvedbe dodamo še stavka: 
+
+```SPARQL
+GROUP BY ?countryName
+ORDER BY DESC (?carCompanyNameCount)
+```
+
+Ko poizvedbo izvedemo, ugotovimo, da je največ avtomobilskih podjetij registriranih v Združenih državah Amerike, sledita pa Kitajska. Da dejansko ugotovimo imena podjetij v teh skupinah, lahko uporabimo drugo agregatno funkcijo, imenovano **GROUP_CONCAT**. **GROUP_CONCAT** uporabi vse vrednosti iz skupine in jih združi v en niz. V našem primeru smo uporabili spremenljivko **?carCompanyName**, da izpišemo imena avtomobilskih podjetij v posamezni državi in jih ločimo z vejico. Rezultat zdaj vsebuje tudi seznam imen podjetij po državah: 
+
+```SPARQL
+SELECT ?countryName (COUNT(DISTINCT ?carCompanyName) AS ?carCompanyNameCount) (GROUP_CONCAT(?carCompanyName) as ?carCompanyNames)
+```
+
+Včasih želimo rezultate filtrirati na podlagi agregatnih funkcij po skupinah. V tem primeru moramo omejitve zapisati v del **HAVING** poizvedbe. Na primer: če želimo izpisati samo države, ki imajo več kot 5 imen avtomobilskih podjetij, moramo za delom **GROUP BY** dodati ustrezno omejitev v bloku **HAVING**. Po izvedbi poizvedbe opazimo, da rezultat vsebuje 13 držav, ki vključujejo večino danes dobro znanih avtomobilskih proizvajalcev.
+
+Naša končna poizvedba izgleda sledeče:
+
+```SPARQL
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX dbp: <http://dbpedia.org/property/>
+PREFIX dbo: <http://dbpedia.org/ontology/>
+
+SELECT ?countryName (COUNT(DISTINCT ?carCompanyName) AS ?carCompanyNameCount) (GROUP_CONCAT(?carCompanyName) as ?carCompanyNames)
+
+WHERE {
+    ?carCompany rdfs:label ?carCompanyName .
+    ?carCompany dbo:industry dbr:Automotive_industry .
+    ?carCompany dbp:locationCountry ?country .
+    ?country rdfs:label ?countryName . 
+    FILTER (LANG(?carCompanyName)="en" AND 
+            LANG(?countryName)="en")
+}
+GROUP BY ?countryName
+HAVING (COUNT(?carCompanyName) > 5)
+ORDER BY DESC (?carCompanyNameCount)
+```
+
+##### Napredne funkcionalnosti
+Prikazali smo različne načine uporabe jezika SPARQL za poizvedovanje nad RDF podatki.
+
+SPARQL 1.1 vključuje širši nabor funkcionalnosti, kot smo jih obravnavali v tem razdelku. Poleg stavka **SELECT** vsebuje tudi ukaze, kot je **CONSTRUCT**, ki generira RDF podatke v skladu z grafno predlogo. **INSERT DATA** omogoča vstavljanje novih trojic v graf. Ukaz **ASK** preveri, ali je poizvedbeni vzorec rešljiv, ne da bi dejansko vrnil rezultate. **DESCRIBE** pa omogoča vpogled v RDF podatke, povezane z določenim virom. Tako kot smo na spletni strani DBPedie preverili lastnosti vira *Audi*, nam lahko stavek **DESCRIBE** posreduje podobne informacije.
+
+Znotraj SPARQL stavkov lahko uporabljamo tudi vgnezdene poizvedbe. V eni sami poizvedbi lahko izvajamo federirano iskanje prek več SPARQL endpointov (**SERVICE**). Povezave (**BIND**) omogočajo spreminjanje oziroma ustvarjanje vrednosti, s katerimi operiramo. Napredne funkcionalnosti, kot so poti lastnosti (angl., property paths), nam omogočajo izvajanje kompleksnih sprehodov po grafu in iskanj.
+
+Pri nadaljnjem delu boste morda naleteli na **SHACL** (angl., Shapes Constraint Language), ki je standard W3C za validacijo vsebine podatkovne baze v obliki RDF grafa. S SHACL lahko definirate omejitve za podatke, ki jih shranjujete v RDF grafu, nato pa preverite skladnost grafa s temi omejitvami.
+
+#### 6.5 Poizvedovanje s SPARQL preko programskih vmesnikov 
+Poizvedovalni jezik SPARQL je možno uporabljati tudi neposredno preko programskih knjižnic, podobno kot SQL pri dostopu do podatkov pri relacijskih podatkovnih bazah.
+
+Na povezavi [SPARQL in Python](./assets/SPARQL_in_Python.ipynb) se nahaja Jupyter delovni zvezek, ki ga lahko preskusite na lokalnem računalniku ali v okviru storitve [Google Colab](http://colab.google.com/).
+
+Delovni zvezek prikazuje primer programske uporabe javnih storitev SPARQL.
+
+
+#### 6.6 Uporaba lastne baze z vmesnikom SPARQL 
+Semantične (RDF) podatke lahko hranimo v namenskih podatkovnih bazah, ki tudi podpirajo poizvedovanje s SPARQL. Primeri takšnih baz so [Amazon Neptune](https://aws.amazon.com/neptune/), [Oracle Graph Database](https://www.oracle.com/database/integrated-graph-database/), [Apache Jena Fuseki](https://jena.apache.org/documentation/fuseki2/index.html), [GraphDB](https://graphdb.ontotext.com/), ...
+
+V našem primeru bomo uporabili **GraphDB**. Bazo bomo zagnali v okolju *Docker* sledeče:
+
+> `docker run -p 127.0.0.1:7200:7200 --name graphdb-instance-name-11 -t ontotext/graphdb:11.2.1`
+
+Ko se baza vzpostavi, lahko do nje dostopate preko spletnega vmesnika na naslovu http://localhost:7200. 
+Za uporabo brezplačne verzije potrebujete licenco, ki jo lahko pridobite na spletni strani https://www.ontotext.com/products/graphdb. 
+
+<p align="center">
+  <img src="./assets/img/SPARQL/graphdb.png" alt="GraphDB vmesnik" width="800px" />
+</p>
+
+Če nato bazo ugasnemo in želimo isti vsebnik ponovno zagnati, uporabimo ukaz:
+
+> `docker start graphdb-instance-name-11`
+
+V podatkovni bazi morate najprej ustvariti nov *GraphDB Repository.* Pri tem v razdelku *Inference and Validation* odznačite opcijo **Disable owl:sameAs** in pustite izbran način sklepanja **RDFS-Plus (Optimized)**.
+
+<p align="center">
+  <img src="./assets/img/SPARQL/graphdb-inference.png" alt="GraphDB ustvarjanje repozitorija" width="800px" />
+</p>
+
+V meniju "Import" nato izberite vaš repozitorij ter naložite datoteki [CRP.ttl](./assets/data/processed/CRP.ttl) in [SURS_obcine_dp_op.ttl](./assets/data/processed/SURS_obcine_dp_op.ttl). 
+
+<p align="center">
+  <img src="./assets/img/SPARQL/graphdb-uvozeno.png" alt="Uvožene datoteke v GraphDB" width="800px" />
+</p>
+
+Opazimo lahko, da je bilo uvoženih 10575 trojčkov. Poleg teh pa je bilo zaradi pravil sklepanja dodatno dodanih še 7507 trojčkov (več o tem v naslednjem poglavju).
+
+V zavihku SPARQL poskusimo izvesti poizvedbo, ki smo jo na začetku poglavja izvedli v Protégé:
+
+```SPARQL
+PREFIX crp: <https://pzsi.sigov.si/datamodel/ns/crp#>
+
+SELECT ?povedek ?predmet
+
+WHERE { 
+    crp:Obcina_32 ?povedek ?predmet . 
+}
+```
+
+Opazimo, da kot rezultat dobimo ustrezne rezultate iz registra CRP.
+
+
+#### 6.7 Federirane poizvedbe SPARQL preko več grafov 
+V prejšnjih razdelkih smo uporabljali tudi javno storitev SPARQL DBPedija. S pomočjo ukaza **SERVICE** lahko poizvedujemo tudi po grafih, ki so shranjeni v drugih bazah in dostopni preko storitve SPARQL. Poskusimo izvesti SPARQL poizvedbo na naši bazi GraphDB in hkrati pridobiti podatke iz DBPedije. Uporabimo primer za podjetje *Audi* in izpišimo ime podjetja in leto ustanovitve:
+
+```SPARQL
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX dbo: <http://dbpedia.org/ontology/>
+PREFIX dbr: <http://dbpedia.org/resource/>
+PREFIX dbp: <http://dbpedia.org/property/>
+
+SELECT ?subject ?name ?foundingYear
+
+WHERE {
+      SERVICE <https://dbpedia.org/sparql> {
+        ?subject dbp:name ?name .
+		    ?subject rdf:type dbo:Company .
+		    ?subject dbo:foundingYear ?foundingYear .
+        FILTER (?subject IN (dbr:Audi))
+      }
+}
+```
+
+Opazimo lahko, da so bili podatki iz DBPedije ustrezno pridobljeni.
+
+V našem registru CRP imamo shranjena le imena in identifikatorje občin. Poskusimo za občino Grosuplje poleg identifikatorja izpisati še ime župana. Na DBPediji opazimo, da ima Grosuplje svoj zapis - https://dbpedia.org/page/Grosuplje. 
+
+```SPARQL
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX crp: <https://pzsi.sigov.si/datamodel/ns/crp#>
+PREFIX dbp: <http://dbpedia.org/property/>
+
+SELECT ?idObcine ?zupan
+
+WHERE { 
+    SERVICE <https://dbpedia.org/sparql> {
+      ?subject dbp:officialName "Grosuplje"@en .
+		  ?subject dbp:leaderName ?zupan .
+    }
+    ?obcina rdf:type crp:Obcina .
+    ?obcina crp:identifikator ?idObcine . 
+    ?obcina crp:vrednost "Grosuplje"@sl .
+}
+```
+
+Zgornji rezultat nam vrne identifikator 32 in ime župana - Peter Verlič.
+
 ### 7. Sklepanje: prehod od podatkov k znanju
+
+<p align="left">
+  <img src="./assets/img/logo_5.png" alt="5. poglavje" width="200px" />
+</p>
+
+<details>
+<summary>Prikaži podrobnosti</summary>
+
+#### 7.1 Uporaba več podatkovnih virov in materializacija - SURS in CRP 
+V predhodnem poglavju smo v našo bazo že uvozili datoteki [CRP.ttl](./assets/data/processed/CRP.ttl) in [SURS_obcine_dp_op.ttl](./assets/data/processed/SURS_obcine_dp_op.ttl). Vira CRP in SURS nista povezana in primer podatkov izgleda sledeče:
+
+<p align="center">
+  <img src="./assets/img/SPARQL/CRP_in_SURS.png" alt="CRP in SURS" width="800px" />
+</p>
+
+Nad podatki CRP lahko za Grosuplje izvedemo sledečo poizvedbo:
+
+```SPARQL
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX crp: <https://pzsi.sigov.si/datamodel/ns/crp#> 
+
+SELECT ?imeObcineCRP ?idCRP
+WHERE {
+  ?obcinaCRP crp:vrednost ?imeObcineCRP .
+  ?obcinaCRP crp:identifikator ?idCRP .
+  ?obcinaCRP rdf:type crp:Obcina .
+  FILTER (?imeObcineCRP = "Grosuplje"@sl)
+}
+```
+
+Nad podatki SURS lahko izvedemo sledečo poizvedbo:
+
+```SPARQL
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX surs: <https://onto.mdp.gov.si/shema/>
+
+SELECT ?imeObcineSURS ?idSURS ?letoMeritve ?steviloPrebivalcev
+WHERE {  
+  ?obcinaSURS surs:naziv ?imeObcineSURS .
+  ?obcinaSURS surs:idObcinaSurs ?idSURS .
+  ?obcinaSURS rdf:type surs:Obcina .
+  ?obcinaSURS surs:imaMeritevPrebivalcev ?meritev .
+  ?meritev surs:leto ?letoMeritve .
+  ?meritev surs:vrednost ?steviloPrebivalcev .
+  FILTER (?imeObcineSURS = "Grosuplje") 
+}
+```
+
+Nad podatki iz obeh delov v grafu lahko sestavimo tudi skupno poizvedbo, ki izgleda sledeče:
+
+```SPARQL
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX crp: <https://pzsi.sigov.si/datamodel/ns/crp#> 
+PREFIX surs: <https://onto.mdp.gov.si/shema/>
+
+SELECT ?imeObcineCRP ?idCRP ?imeObcineSURS ?idSURS ?letoMeritve ?steviloPrebivalcev
+WHERE {
+  ?obcinaCRP crp:vrednost ?imeObcineCRP .
+  ?obcinaCRP crp:identifikator ?idCRP .
+  ?obcinaCRP rdf:type crp:Obcina .
+  FILTER (?imeObcineCRP = "Grosuplje"@sl)
+
+  ?obcinaSURS surs:naziv ?imeObcineSURS .
+  ?obcinaSURS surs:idObcinaSurs ?idSURS .
+  ?obcinaSURS rdf:type surs:Obcina .
+  ?obcinaSURS surs:imaMeritevPrebivalcev ?meritev .
+  ?meritev surs:leto ?letoMeritve .
+  ?meritev surs:vrednost ?steviloPrebivalcev .
+  FILTER (?imeObcineSURS = "Grosuplje") 
+}
+```
+
+Rezultat izgleda primeren, **vendar POZOR**! Poizvedba išče ujemanje na vzorcih na dveh nepovezanih komponentah grafa. Ker je v CRP delu grafa možna samo ena rešitev, rezultat izgleda v redu. Sicer pa takšna poizvedba predstavlja **kartezični produkt** med delom grafa CRP in SURS.
+
+Ker vemo, da so v našem grafu nekateri koncepti enaki, vendar poimenovani drugače, moramo to eksplicitno definirati. V datoteki [Integracija_CRP_SURS_SPARQL.ttl](./assets/data/processed/Integracija_CRP_SURS_SPARQL.ttl) definiramo te enakosti s pomočjo lastnosti `owl:equivalentClass` in `owl:sameAs`. 
+
+```SPARQL
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix surs: <https://onto.mdp.gov.si/shema/> .
+@prefix crp: <https://pzsi.sigov.si/datamodel/ns/crp#> .
+
+surs:Obcina owl:equivalentClass crp:Obcina .
+surs:naziv owl:sameAs crp:vrednost .
+```
+
+Uvozimo sedaj še to datoteko v bazo GraphDB. Opazimo lahko, da sta bila uvožena 2 trojčka (*Explicit*), dodatno pa je bilo zgeneriranih še 1713 trojčkov (iz 7507 na 9220, *Inferred*).
+
+<p align="center">
+  <img src="./assets/img/SPARQL/graphdb-inferred.png" alt="Dodane povezave med SURS in CRP" width="300px" />
+</p>
+
+Dodatni trojčki, ki so bili zgenerirani, so posledica mehanizma sklepanja in predstavljajo materializirane povezave, ki se nato zaradi tega tudi odražajo v poizvedbah. Pri spodnji poizvedbi lahko opazimo, da sta sedaj oba tipa občin izenačena in da lahko lastnost `crp:vrednost` uporabljamo tudi nad primerki občin iz SURS.
+
+```SPARQL
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX crp: <https://pzsi.sigov.si/datamodel/ns/crp#> 
+PREFIX surs: <https://onto.mdp.gov.si/shema/>
+
+SELECT * WHERE {
+  ?obcina rdf:type surs:Obcina .
+  ?obcina surs:naziv ?nazivSURS .
+  ?obcina crp:vrednost ?nazivCRP . 
+  ?obcina surs:imaMeritevPrebivalcev ?meritev .
+  ?meritev surs:leto ?letoMeritve .
+  ?meritev surs:vrednost ?vrednost .
+}
+```
+
+</details>
 
 ### 8. Vizualizacija
 
