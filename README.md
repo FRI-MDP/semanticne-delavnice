@@ -1,6 +1,7 @@
 <p align="center">
   <img src="./assets/img/logo.png" alt="Delavnice semantičnega opisovanja podatkov" width="200px" /><br><br>
-   <a href="./assets/predstavitev.pdf"><img src="./assets/img/prenesi_pdf.png" alt="Delavnice semantičnega opisovanja podatkov" width="150px" /></a>
+  Predstavitev: <a href="./assets/predstavitev.pdf"><img src="./assets/img/prenesi_pdf.png" alt="Delavnice semantičnega opisovanja podatkov" width="150px" /></a><br>
+  Predstavitev SPARQL: <a href="./assets/predstavitev-SPARQL.pdf"><img src="./assets/img/prenesi_pdf.png" alt="Delavnice semantičnega opisovanja podatkov - SPARQL" width="150px" /></a><br>
 </p>
 
 # Delavnice semantičnega opisovanja podatkov
