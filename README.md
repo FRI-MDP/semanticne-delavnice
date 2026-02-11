@@ -1529,6 +1529,8 @@ WHERE {
 
 Zgornji rezultat nam vrne identifikator 32 in ime župana - Peter Verlič.
 
+</details>
+
 ### 7. Sklepanje: prehod od podatkov k znanju
 
 <p align="left">
