@@ -1183,7 +1183,7 @@ Kot smo ugotovili prej, SPARQL omogoča definiranje trojic, ki se morajo ujemati
 
 Za pridobitev rezultatov moramo definirati spremenljivke, ki se vežejo na koncepte RDF. V nadaljnjih primerih bomo dodali tudi pogoje in preddefinirane vrednosti, da pridobimo točno želene rezultate.
 
-Najprej si oglejmo najpreprostejšo poizvedbo: `SELECT ?subject ?predicate ?object`. Ta poizvedba vrne vrednosti za definirane spremenljivke. V našem primeru vrne vse trojice v grafu znanja. Naš primer vsebuje 9 trojic, prikazane so 3.
+Najprej si oglejmo najpreprostejšo poizvedbo: `SELECT ?subject ?predicate ?object`. Ta poizvedba vrne vrednosti za definirane spremenljivke. V našem primeru vrne vse trojice v grafu znanja. Naš primer vsebuje 9 trojic.
 
 > Odvisno od implementacije SPARQL poizvedovalnega vmesnika se lahko zgodi, da tako enostavna poizvedba ne bo delovala in boste morali vnesi še stavek WHERE z navedenimi temi tremi spremenljivkami.
 
@@ -1498,8 +1498,8 @@ SELECT ?subject ?name ?foundingYear
 WHERE {
       SERVICE <https://dbpedia.org/sparql> {
         ?subject dbp:name ?name .
-		    ?subject rdf:type dbo:Company .
-		    ?subject dbo:foundingYear ?foundingYear .
+        ?subject rdf:type dbo:Company .
+        ?subject dbo:foundingYear ?foundingYear .
         FILTER (?subject IN (dbr:Audi))
       }
 }
@@ -1519,7 +1519,7 @@ SELECT ?idObcine ?zupan
 WHERE { 
     SERVICE <https://dbpedia.org/sparql> {
       ?subject dbp:officialName "Grosuplje"@en .
-		  ?subject dbp:leaderName ?zupan .
+      ?subject dbp:leaderName ?zupan .
     }
     ?obcina rdf:type crp:Obcina .
     ?obcina crp:identifikator ?idObcine . 
