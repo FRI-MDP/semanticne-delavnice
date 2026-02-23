@@ -1,14 +1,14 @@
 <p align="center">
   <img src="./assets/img/logo.png" alt="Delavnice semantičnega opisovanja podatkov" width="200px" /><br><br>
-  Predstavitev: <a href="./assets/predstavitev.pdf"><img src="./assets/img/prenesi_pdf.png" alt="Delavnice semantičnega opisovanja podatkov" width="150px" /></a><br>
-  Predstavitev SPARQL: <a href="./assets/predstavitev-SPARQL.pdf"><img src="./assets/img/prenesi_pdf.png" alt="Delavnice semantičnega opisovanja podatkov - SPARQL" width="150px" /></a><br>
+  Predstavitev:<br><a href="./assets/predstavitev.pdf"><img src="./assets/img/prenesi_pdf.png" alt="Delavnice semantičnega opisovanja podatkov" width="150px" /></a><br>
+  Predstavitev SPARQL:<br><a href="./assets/predstavitev-SPARQL.pdf"><img src="./assets/img/prenesi_pdf.png" alt="Delavnice semantičnega opisovanja podatkov - SPARQL" width="150px" /></a><br>
 </p>
 
 # Delavnice semantičnega opisovanja podatkov
 
 ## Osnovni podatki
 
-<details>
+<details open>
 <summary>Prikaži podrobnosti</summary>
 
 ### Termini
@@ -47,6 +47,13 @@ Zaposleni v javnem sektorju, ki želijo napredovati na področju semantičnega o
 ### Financiranje
 
 Naročilo sofinancirata Republika Slovenija in Evropska unija iz Načrta za okrevanje in odpornost (NOO), komponenta Digitalne preobrazbe javnega sektorja in javne uprave (C2K7), ukrep Razvoj novih dinamičnih e-storitev.
+
+<p align="center">
+<img src="./assets/img/NOO_Logo_RGB_primarni_SI_gradient.png" alt="NOO Logo" width="300px" />
+</p>
+<p align="center">
+<img src="./assets/img/SL_Financira_Evropska_unija_PANTONE.png" alt="EU Logo" width="300px" />
+</p>
 
 </details>
 
